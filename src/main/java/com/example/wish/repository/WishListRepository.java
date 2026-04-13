@@ -15,7 +15,19 @@ public class WishListRepository {
         this.jdbcTemplate=jdbcTemplate;
     }
 
-    public void getAllWishes(){
+    public List<WishList> getAllWishes(){
+        String sql = """
+                SELECT wl.wish_id, wl.name, wl.description, wl.price, wl.quantity, wl.product_link
+                FROM wish_list wl
+                """;
+
+        List<WishList> wishList = jdbcTemplate.query(sql, new WishListRowMapper());
+
+        for (WishList wishlist : wishList){
+            wishlist.setTags(getTagsByWishName(wishlist.getName()));
+        }
+
+        return wishList;
 
     }
 

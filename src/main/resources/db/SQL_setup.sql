@@ -10,7 +10,7 @@ drop table if exists wish;
 drop table if exists user;
 SET FOREIGN_KEY_CHECKS = 1;
 
-create table wish_list(
+create table wish(
 wish_id int AUTO_INCREMENT primary key,
 name VARCHAR(255) not null,
 description VARCHAR(255) not null,
@@ -25,7 +25,7 @@ tag_id int AUTO_INCREMENT primary key,
 tag_name VARCHAR (255)
 );
 
-create table wish_list_tag(
+create table wish_tag(
 wish_id int AUTO_INCREMENT primary key,
 tag_id int AUTO_INCREMENT primary key,
 foreign key (wish_id) REFERENCES wish (wish_id) ON DELETE CASCADE,
