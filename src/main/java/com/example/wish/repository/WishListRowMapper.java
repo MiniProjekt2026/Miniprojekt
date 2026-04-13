@@ -1,6 +1,6 @@
-package com.example.onske.repository;
+package com.example.wish.repository;
 
-import com.example.onske.model.WishList;
+import com.example.wish.model.WishList;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.SQLException;

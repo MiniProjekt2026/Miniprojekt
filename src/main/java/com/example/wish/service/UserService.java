@@ -1,6 +1,6 @@
-package com.example.onske.service;
+package com.example.wish.service;
 
-import com.example.onske.repository.UserRepository;
+import com.example.wish.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
