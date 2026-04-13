@@ -71,7 +71,7 @@ public class WishListService {
 
     public WishList findWishByUserIdAndWishId(int userId, int wishId){
 
-        WishList UserIdAndWishId
+        WishList
 
         return WishList;
     }
