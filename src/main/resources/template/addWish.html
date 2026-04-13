@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Tilføj ønske - Wish List</title>
+</head>
+<body>
+
+<nav>
+    <div>
+        <a href="/">Forside</a>
+        <a href="/wishlist/{userid}">Ønsker</a>
+        <a href="/wishes/add" class="btn btn-sm">+ Tilføj</a>
+    </div>
+</nav>
+
+<main>
+
+    <a href="/wishes">← Alle ønsker</a>
+
+    <div>
+        <h1>Tilføj nyt ønske</h1>
+
+        <form th:action="@{/wishes/save}" th:object="${wish}" method="post">
+
+            <div>
+                <label for="name">Navn</label>
+                <input type="text" id="name" th:field="*{name}" placeholder="Indtast ønskets titel" required/>
+            </div>
+
+            <div>
+                <label for="description">Beskrivelse</label>
+                <textarea id="description" th:field="*{description}" placeholder="Indtast en beskrivelse"></textarea>
+            </div>
+
+            <div>
+                <label for="price">Beskrivelse</label>
+                <textarea id="price" th:field="*{price}" placeholder="0"></textarea>
+            </div>
+
+            <div class="stepper">
+                <button onclick="decrease()">−</button>
+                <input type="number" id="quantity" th:field="*{price}" min="0">
+                <button onclick="increase()">+</button>
+            </div>
+
+            <script>
+                function increase() {
+                    const input = document.getElementById("quantity");
+                    input.value = parseInt(input.value) + 1;
+                }
+
+                function decrease() {
+                    const input = document.getElementById("quantity");
+                    if (input.value > input.min) {
+                        input.value = parseInt(input.value) - 1;
+                    }
+                }
+            </script>
+
+            <div>
+                <label>Tags</label>
+                <div>
+                    <label th:each="tag : ${allTags}">
+                        <input type="checkbox" th:field="*{tags}" th:value="${tag}"/>
+                        <span th:text="${tag}"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="productLink">Produktlink</label>
+                <textarea id="productLink" th:field="*{productLink}" placeholder="Indsæt et produktlink"></textarea>
+            </div>
+
+            <div>
+                <a href="/wishlist/{name}">Annuller</a>
+                <button type="submit" class="btn">Tilføj ønske</button>
+            </div>
+
+        </form>
+    </div>
+
+</main>
+
+</body>
+</html>
