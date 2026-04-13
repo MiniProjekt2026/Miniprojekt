@@ -15,10 +15,6 @@ public class WishListService {
         this.wishListRepository = wishListRepository;
     }
 
-    public List<WishList> getAttractions() {
-        return wishListRepository.getAllWishes();
-    }
-
     public List<WishList> getWishes(){
         return wishListRepository.getAllWishes();
     }
