@@ -25,13 +25,8 @@ public class WishListController {
 
     }
 
-    @GetMapping("/wishlist")
-    public void getAllWishes(){
-
-    }
-
-    @GetMapping("/{name}")
-    public void getWishesByName(){
+    @GetMapping("/wishlist/{name}")
+    public void getAllWishesByUsername(){
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.wish.service;
 
 
+import com.example.wish.model.WishList;
 import com.example.wish.repository.WishListRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,12 @@ public class WishListService {
         this.wishListRepository = wishListRepository;
     }
 
-    public void getWishes(){
+    public List<WishList> getAttractions() {
+        return wishListRepository.getAllWishes();
+    }
 
+    public List<WishList> getWishes(){
+        return wishListRepository.getAllWishes();
     }
 
     public void addWishes(){
@@ -23,11 +28,24 @@ public class WishListService {
     }
 
     public List<String> getTags(){
-
+        return wishListRepository.getTags();
     }
 
-    public List<String> getTagsByWishName(){
+    public WishList findWishListByName(String name){
+        String normalizedInput = normalize(name);
+        WishList wishlist = null;
 
+        for (WishList w : wishListRepository.getAllWishes()){
+            if(normalize(w.getName()).equals(normalizedInput)){
+                wishlist = w;
+                break;
+            }
+        }
+        return wishlist;
+    }
+
+    private String normalize (String name){
+        return name.toLowerCase().replaceAll("\\s+", "");
     }
 
     public void updateWishes(){
