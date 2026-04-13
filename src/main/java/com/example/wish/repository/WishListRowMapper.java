@@ -18,7 +18,8 @@ public class WishListRowMapper implements RowMapper<WishList> {
                 rs.getDouble("price"),
                 rs.getInt("quantity"),
                 new ArrayList<>(),
-                rs.getString("product_link")
+                rs.getString("product_link"),
+                rs.getInt("user_id")
         );
     }
 }

@@ -11,20 +11,22 @@ public class WishList {
     private int quantity;
     private List<String> tags;
     private String productLink;
+    private int userId;
 
     public WishList() {
     }
 
-    public WishList(String name, String description, double price, int quantity, List<String> tags, String productLink){
+    public WishList(String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
         this.name=name;
         this.description=description;
         this.price=price;
         this.quantity=quantity;
         this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
         this.productLink=productLink;
+        this.userId=userId;
     }
 
-    public WishList(int id, String name, String description, double price, int quantity, List<String> tags, String productLink){
+    public WishList(int id, String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
         this.id=id;
         this.name=name;
         this.description=description;
@@ -32,6 +34,15 @@ public class WishList {
         this.quantity=quantity;
         this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
         this.productLink=productLink;
+        this.userId=userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getId() {

@@ -1,10 +1,12 @@
 package com.example.wish.service;
 
 
+import com.example.wish.model.User;
 import com.example.wish.model.WishList;
 import com.example.wish.repository.WishListRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,4 +53,28 @@ public class WishListService {
     public void deleteWish(){
 
     }
+
+    public void getWishListByWishId(){
+
+    }
+
+    public List<WishList> findWishListByUserId(int userid){
+        List<WishList> result = new ArrayList<>();
+
+        for (WishList w : wishListRepository.getAllWishes()){
+            if(w.getUserId() == userid){
+                result.add(w);
+            }
+        }
+        return result;
+    }
+
+    public WishList findWishByUserIdAndWishId(int userId, int wishId){
+
+        WishList UserIdAndWishId
+
+        return WishList;
+    }
+
+
 }

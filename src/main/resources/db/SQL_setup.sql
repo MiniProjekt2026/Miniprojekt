@@ -19,10 +19,10 @@ create table wish_list
 (
     wish_id      int AUTO_INCREMENT primary key,
     name         VARCHAR(255) not null,
-    description  VARCHAR(255) not null,
-    price double not null,
+    description  VARCHAR(255),
+    price double,
     quantity     int,
-    product_link VARCHAR(255) not null,
+    product_link VARCHAR(255),
     foreign key (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
