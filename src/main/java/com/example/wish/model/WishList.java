@@ -1,5 +1,6 @@
 package com.example.wish.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WishList {
@@ -15,12 +16,12 @@ public class WishList {
     }
 
     public WishList(String name, String description, double price, int quantity, List<String> tags, String productLink){
-      this.name=name;
-      this.description=description;
-      this.price=price;
-      this.quantity=quantity;
-      this.tags=tags;
-      this.productLink=productLink;
+        this.name=name;
+        this.description=description;
+        this.price=price;
+        this.quantity=quantity;
+        this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
+        this.productLink=productLink;
     }
 
     public WishList(int id, String name, String description, double price, int quantity, List<String> tags, String productLink){
@@ -29,7 +30,7 @@ public class WishList {
         this.description=description;
         this.price=price;
         this.quantity=quantity;
-        this.tags=tags;
+        this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
         this.productLink=productLink;
     }
 
