@@ -1,6 +1,6 @@
-package com.example.onske.controller;
+package com.example.wish.controller;
 
-import com.example.onske.service.WishListService;
+import com.example.wish.service.WishListService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

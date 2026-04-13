@@ -1,4 +1,4 @@
-package com.example.onske.repository;
+package com.example.wish.repository;
 
 
 import org.springframework.jdbc.core.JdbcTemplate;

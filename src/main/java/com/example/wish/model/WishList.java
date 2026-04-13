@@ -1,4 +1,4 @@
-package com.example.onske.model;
+package com.example.wish.model;
 
 import java.util.List;
 

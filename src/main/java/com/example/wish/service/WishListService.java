@@ -1,7 +1,7 @@
-package com.example.onske.service;
+package com.example.wish.service;
 
 
-import com.example.onske.repository.WishListRepository;
+import com.example.wish.repository.WishListRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

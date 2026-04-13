@@ -1,4 +1,4 @@
-package com.example.onske.model;
+package com.example.wish.model;
 
 public class User {
     private int userId;
