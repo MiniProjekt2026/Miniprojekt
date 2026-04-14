@@ -1,0 +1,17 @@
+<form th:action="@{/user/saveUser}" method="post">
+    <label>Username:</label>
+    <input type="text" name="username" />
+
+    <br><br>
+
+    <label>Password:</label>
+    <input type="password" name="password" />
+
+    <br><br>
+
+    <button type="submit">Opret</button>
+</form>
+
+<p th:if="${error}" th:text="${error}"></p>
+
+<a th:href="@{/user/login}">Gå til login</a>

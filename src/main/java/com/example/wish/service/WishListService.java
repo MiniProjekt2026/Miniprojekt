@@ -13,28 +13,28 @@ import java.util.List;
 public class WishListService {
     private final WishListRepository wishListRepository;
 
-    public WishListService(WishListRepository wishListRepository){
+    public WishListService(WishListRepository wishListRepository) {
         this.wishListRepository = wishListRepository;
     }
 
-    public List<WishList> getWishes(){
+    public List<WishList> getWishes() {
         return wishListRepository.getAllWishes();
     }
 
-    public void addWishes(){
+    public void addWishes() {
 
     }
 
-    public List<String> getTags(){
+    public List<String> getTags() {
         return wishListRepository.getTags();
     }
 
-    public WishList findWishListByName(String name){
+    public WishList findWishListByName(String name) {
         String normalizedInput = normalize(name);
         WishList wishlist = null;
 
-        for (WishList w : wishListRepository.getAllWishes()){
-            if(normalize(w.getName()).equals(normalizedInput)){
+        for (WishList w : wishListRepository.getAllWishes()) {
+            if (normalize(w.getName()).equals(normalizedInput)) {
                 wishlist = w;
                 break;
             }
@@ -42,39 +42,39 @@ public class WishListService {
         return wishlist;
     }
 
-    private String normalize (String name){
+    private String normalize(String name) {
         return name.toLowerCase().replaceAll("\\s+", "");
     }
 
-    public void updateWishes(){
+    public void updateWishes() {
 
     }
 
-    public void deleteWish(){
+    public void deleteWish() {
 
     }
 
-    public void getWishListByWishId(){
+    public void getWishListByWishId() {
 
     }
 
-    public List<WishList> findWishListByUserId(int userid){
+    public List<WishList> findWishListByUserId(int userid) {
         List<WishList> result = new ArrayList<>();
 
-        for (WishList w : wishListRepository.getAllWishes()){
-            if(w.getUserId() == userid){
+        for (WishList w : wishListRepository.getAllWishes()) {
+            if (w.getUserId() == userid) {
                 result.add(w);
             }
         }
         return result;
     }
 
-    public WishList findWishByUserIdAndWishId(int userId, int wishId){
-
-        WishList
-
-        return WishList;
-    }
+//    public WishList findWishByUserIdAndWishId(int userId, int wishId) {
+//
+//        WishList
+//
+//        return WishList;
+//    }
 
 
 }

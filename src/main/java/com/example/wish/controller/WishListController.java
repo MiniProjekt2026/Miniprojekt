@@ -31,14 +31,14 @@ public class WishListController {
 
     }
 
-    @GetMapping("/wishlist/{userid}/{wishid}")
-    public String getWishByWishId(@PathVariable int userid, @PathVariable int wishId, Model model) {
-
-        WishList wish = wishListService.findWishByUserIdAndWishId(userid, wishId);
-
-        model.addAttribute("wish", wish);
-        return "wish";
-    }
+//    @GetMapping("/wishlist/{userid}/{wishid}")
+//    public String getWishByWishId(@PathVariable int userid, @PathVariable int wishid, Model model) {
+//
+//        WishList wish = wishListService.findWishByUserIdAndWishId(userid, wishid);
+//
+//        model.addAttribute("wish", wish);
+//        return "wish";
+//    }
 
     @GetMapping("/wishlist/{userid}")
     public String getAllWishesByUsername(@PathVariable int userid, Model model) {
