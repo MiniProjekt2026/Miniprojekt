@@ -1,7 +1,6 @@
 package com.example.wish.service;
 
 
-import com.example.wish.model.User;
 import com.example.wish.model.WishList;
 import com.example.wish.repository.WishListRepository;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,8 @@ public class WishListService {
         return wishListRepository.getAllWishes();
     }
 
-    public void addWishes() {
-
+    public void addWishes(WishList wishList) {
+        wishListRepository.addWish(wishList);
     }
 
     public List<String> getTags() {
