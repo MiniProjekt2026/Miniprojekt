@@ -9,7 +9,7 @@ public class WishList {
     private String description;
     private double price;
     private int quantity;
-    private List<String> tags;
+    private List<String> tags = new ArrayList<>();
     private String productLink;
     private int userId;
 
