@@ -62,7 +62,7 @@ public class WishListRepository {
     }
 
     public List<String> getTags() {
-        String getTags = "SELECT tag_name FROM tags";
+        String getTags = "SELECT tag_name FROM tag";
 
         return jdbcTemplate.query(getTags,
                 (rs, rowNum) -> rs.getString("tag_name"));
