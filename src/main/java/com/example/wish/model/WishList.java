@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WishList {
-    private int id;
+    private int wish_id;
     private String name;
     private String description;
     private double price;
@@ -26,8 +26,8 @@ public class WishList {
         this.userId=userId;
     }
 
-    public WishList(int id, String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
-        this.id=id;
+    public WishList(int wish_id, String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
+        this.wish_id=wish_id;
         this.name=name;
         this.description=description;
         this.price=price;
@@ -45,12 +45,12 @@ public class WishList {
         this.userId = userId;
     }
 
-    public int getId() {
-        return id;
+    public int getWish_id() {
+        return wish_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setWish_id(int wish_id) {
+        this.wish_id = wish_id;
     }
 
     public String getName() {

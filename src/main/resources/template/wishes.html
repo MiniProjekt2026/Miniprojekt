@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ønskeliste</title>
+</head>
+<body>
+
+<h1>Ønskeliste</h1>
+
+<div th:if="${wishes != null and !wishes.isEmpty()}">
+    <div th:each="wish : ${wishes}">
+        <hr>
+        <p><strong>Navn:</strong> <span th:text="${wish.name}"></span></p>
+        <p><strong>Beskrivelse:</strong> <span th:text="${wish.description}"></span></p>
+        <p><strong>Pris:</strong> <span th:text="${wish.price}"></span></p>
+        <p><strong>Antal:</strong> <span th:text="${wish.quantity}"></span></p>
+        <p><strong>Produktlink:</strong>
+            <a th:href="${wish.productLink}" th:text="${wish.productLink}"></a>
+        </p>
+
+        <p><strong>Tags:</strong></p>
+        <ul>
+            <li th:each="tag : ${wish.tags}" th:text="${tag}"></li>
+        </ul>
+    </div>
+</div>
+
+<div th:if="${wishes == null or wishes.isEmpty()}">
+    <p>Ingen ønsker fundet.</p>
+</div>
+
+</body>
+</html>
