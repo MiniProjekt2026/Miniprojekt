@@ -119,7 +119,7 @@ public class WishListRepository {
         List <WishList> wishList = jdbcTemplate.query(sql, new WishListRowMapper(), userId);
 
         for (WishList wish : wishList){
-            wish.setTags(getTagsByWishId(wish.getWish_id()));
+            wish.setTags(getTagsByWishId(wish.getId()));
         }
         return wishList;
     }
