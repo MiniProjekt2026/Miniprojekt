@@ -32,13 +32,14 @@ public class WishListRepository {
     }
 
     public void addWish(WishList wishList) {
-        String sqlWish ="INSERT INTO wish_list(name, description, price, quantity, product_link) VALUES (?,?,?,?,?)";
+        String sqlWish ="INSERT INTO wish_list(name, description, price, quantity, product_link, user_id) VALUES (?,?,?,?,?,?)";
         jdbcTemplate.update(sqlWish,
                 wishList.getName(),
                 wishList.getDescription(),
                 wishList.getPrice(),
                 wishList.getQuantity(),
-                wishList.getProductLink()
+                wishList.getProductLink(),
+                wishList.getUserId()
         );
 
         Integer wishId = findWishIdByName(wishList.getName());
@@ -108,6 +109,37 @@ public class WishListRepository {
 
     }
 
+    private List<WishList> getWishesByUserId(int userId){
+        String sql = """
+                SELECT wish_id, name, description, price, quantity, product_link, user_id
+                FROM wish_list
+                WHERE user_id = ?
+                """;
+
+        List <WishList> wishList = jdbcTemplate.query(sql, new WishListRowMapper(), userId);
+
+        for (WishList wish : wishList){
+            wish.setTags(getTagsByWishId(wish.getId()));
+        }
+        return wishList;
+    }
+
+
+    private List<String> getTagsByWishId(int id){
+        String sql = """
+                  SELECT t.tag_name
+                            FROM tag t
+                            JOIN wish_list_tag wlt ON t.tag_id = wlt.tag_id
+                            WHERE wlt.wish_id = ?
+                """;
+
+        return jdbcTemplate.query(
+                sql, (rs, rowNum) -> rs.getString("tag_name"), id);
+
+
+    }
+
+    public void deleteWish(){
     public boolean deleteWish(String name) {
         Integer wishId = findWishIdByName(name);
 

@@ -46,7 +46,7 @@ public class WishListController {
         List<WishList> wishes = wishListService.findWishListByUserId(userid);
 
         if (wishes.isEmpty()) {
-            throw new IllegalArgumentException("Ingen ønskeliste fundet for det username");
+            throw new IllegalArgumentException("Ingen ønskeliste fundet for det userId");
         }
 
         model.addAttribute("wishes", wishes);
