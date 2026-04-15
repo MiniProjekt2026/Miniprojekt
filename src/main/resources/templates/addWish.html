@@ -8,16 +8,11 @@
 
 <nav>
     <div>
-        <a href="/">Forside</a>
-        <a href="/wishlist">Ønsker</a>
         <a href="/wishes/add" class="btn btn-sm">+ Tilføj</a>
     </div>
 </nav>
 
 <main>
-
-    <a href="/wishes">← Alle ønsker</a>
-
     <div>
         <h1>Tilføj nyt ønske</h1>
 
@@ -34,14 +29,14 @@
             </div>
 
             <div>
-                <label for="price">Beskrivelse</label>
+                <label for="price">Pris</label>
                 <textarea id="price" th:field="*{price}" placeholder="0"></textarea>
             </div>
 
             <div class="stepper">
-                <button onclick="decrease()">−</button>
-                <input type="number" id="quantity" th:field="*{price}" min="0">
-                <button onclick="increase()">+</button>
+                <button type="button"  onclick="decrease()">−</button>
+                <input type="number" id="quantity" th:field="*{quantity}" min="0">
+                <button type="button" onclick="increase()">+</button>
             </div>
 
             <script>
@@ -74,7 +69,6 @@
             </div>
 
             <div>
-                <a href="/wishlist/{name}">Annuller</a>
                 <button type="submit" class="btn">Tilføj ønske</button>
             </div>
 
