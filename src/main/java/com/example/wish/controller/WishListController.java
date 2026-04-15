@@ -21,7 +21,6 @@ public class WishListController {
     @GetMapping("/add")
     public String addWishes(Model model) {
         model.addAttribute("wishList", new WishList());
-        model.addAttribute("user", new User());
         model.addAttribute("tags", wishListService.getTags());
         return "addWish";
     }
