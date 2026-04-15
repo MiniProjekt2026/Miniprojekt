@@ -69,6 +69,12 @@ public class WishListController {
     }
 
     @PostMapping("/delete/{name}")
-    public void deleteWish() {
+    public String deleteWish(@PathVariable String name) {
+        WishList deletedWish = wishListService.deleteWish(name);
+
+        if (deletedWish == null) {
+            throw new IllegalArgumentException("No wish found with that name");
+        }
+        return "redirect:/wishes";
     }
 }
