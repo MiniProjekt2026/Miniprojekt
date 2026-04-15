@@ -140,7 +140,27 @@ public class WishListRepository {
     }
 
     public void deleteWish(){
+    public boolean deleteWish(String name) {
+        Integer wishId = findWishIdByName(name);
 
+        if(wishId == null) {
+            return false;
+        }
+
+        String deleteTagsSQL = """
+                DELETE FROM wish_list_tag
+                    WHERE wish_id = ?
+                """;
+        jdbcTemplate.update(deleteTagsSQL, wishId);
+
+        String deleteWishListSQL = """
+                DELETE FROM wish_list
+                    WHERE wish_id = ?
+                """;
+
+        int rows = jdbcTemplate.update(deleteWishListSQL, wishId);
+
+        return rows > 0;
     }
 
 }

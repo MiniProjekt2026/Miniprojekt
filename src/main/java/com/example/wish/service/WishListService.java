@@ -49,8 +49,20 @@ public class WishListService {
 
     }
 
-    public void deleteWish() {
+    public WishList deleteWish(String name) {
+        WishList wishList = findWishListByName(name);
 
+        if (wishList == null) {
+            return null;
+        }
+
+        boolean deleted = wishListRepository.deleteWish(name);
+
+        if (!deleted) {
+            return null;
+        }
+
+        return wishList;
     }
 
     public void getWishListByWishId() {
