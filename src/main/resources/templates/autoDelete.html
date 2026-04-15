@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Sletter...</title>
+</head>
+<body>
+<!-- Auto-submits a DELETE action via a hidden form -->
+<form th:action="@{/wishes/delete/{name}(name=${name})}" method="post" id="autoDeleteForm"></form>
+<script>document.getElementById('autoDeleteForm').submit();</script>
+</body>
+</html>
