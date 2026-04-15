@@ -125,7 +125,7 @@ public class WishListRepository {
     }
 
 
-    private List<String> getTagsByWishId(int wish_id){
+    private List<String> getTagsByWishId(int id){
         String sql = """
                   SELECT t.tag_name
                             FROM tag t
@@ -134,7 +134,7 @@ public class WishListRepository {
                 """;
 
         return jdbcTemplate.query(
-                sql, (rs, rowNum) -> rs.getString("tag_name"), wish_id);
+                sql, (rs, rowNum) -> rs.getString("tag_name"), id);
 
 
     }

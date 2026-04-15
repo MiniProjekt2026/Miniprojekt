@@ -49,8 +49,8 @@ public class WishList {
         return id;
     }
 
-    public void setId(int wish_id) {
-        this.id = wish_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
