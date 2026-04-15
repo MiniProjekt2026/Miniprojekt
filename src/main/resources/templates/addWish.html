@@ -9,7 +9,7 @@
 <nav>
     <div>
         <a href="/">Forside</a>
-        <a href="/wishlist/{userid}">Ønsker</a>
+        <a href="/wishlist">Ønsker</a>
         <a href="/wishes/add" class="btn btn-sm">+ Tilføj</a>
     </div>
 </nav>
@@ -21,7 +21,7 @@
     <div>
         <h1>Tilføj nyt ønske</h1>
 
-        <form th:action="@{/wishes/save}" th:object="${wish}" method="post">
+        <form th:action="@{/wishes/save}" th:object="${wishList}" method="post">
 
             <div>
                 <label for="name">Navn</label>
