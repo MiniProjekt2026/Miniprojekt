@@ -19,14 +19,15 @@ public class WishListController {
     }
 
     @GetMapping("/add")
-    public void addWishes(Model model) {
+    public String addWishes(Model model) {
         model.addAttribute("wishList", new WishList());
         model.addAttribute("user", new User());
         model.addAttribute("tags", wishListService.getTags());
+        return "addWish";
     }
 
     @PostMapping("/save")
-    public String saveWishes(@ModelAttribute WishList wishList) {
+    public String saveWishes(@ModelAttribute("wishList") WishList wishList) {
         wishListService.addWishes(wishList);
         return "redirect:/wishes";
     }
