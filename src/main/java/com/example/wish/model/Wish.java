@@ -101,3 +101,4 @@ public class Wish {
         this.productLink = productLink;
     }
 }
+//:)
