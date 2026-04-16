@@ -31,8 +31,8 @@ create table wish
     price double,
     quantity     int,
     product_link VARCHAR(255),
-    user_id      int,
-    foreign key (user_id) REFERENCES user (user_id) ON DELETE CASCADE
+    wish_list_id int          not null,
+    foreign key (wish_list_id) REFERENCES wish_list (wish_list_id) ON DELETE CASCADE
 );
 
 create table tag
@@ -57,6 +57,4 @@ create table wish_list
     name         VARCHAR(255) not null,
     foreign key (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
-
-
 
