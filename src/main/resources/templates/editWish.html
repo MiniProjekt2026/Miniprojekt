@@ -8,9 +8,10 @@
 
 <h1>Rediger ønskeliste</h1>
 
-<form action="/wishes/update" method="post" th:action="@{/wishes/update}" th:object="${wishList}">
+<form th:action="@{/wishes/update}" method="post" th:object="${wish}">
 
-    <input type="hidden" name="oldname" th:value="${oldName}" />
+    <!-- ID med -->
+    <input type="hidden" th:field="*{id}" />
 
     <label>Navn:</label><br>
     <input type="text" th:field="*{name}" /><br><br>

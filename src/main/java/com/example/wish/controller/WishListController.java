@@ -15,6 +15,17 @@ public class WishListController {
     public WishListController(WishListService wishListService) {
         this.wishListService = wishListService;
     }
+
+
+    @GetMapping("/edit/{wishListId}")
+    public String editWishList(@PathVariable int wishListId, Model model) {
+        WishList wishList = wishListService.findWishListById(wishListId);
+
+        if (wishList == null) {
+            throw new IllegalArgumentException("Wishlist findes ikke");
+        }
+
+        model.addAttribute("wishList", wishList);
     @GetMapping("")
     public String getAllWishLists(Model model) {
         model.addAttribute("wishlists", wishListService.getAllWishLists());
@@ -43,15 +54,16 @@ public class WishListController {
     }
 
     @PostMapping("/update")
-    public String updateWishList(@RequestParam String oldname,
-                                 @ModelAttribute WishList wishList) {
-
-        WishList updatedWishList = wishListService.updateWishList(oldname, wishList);
+    public String updateWishList(@ModelAttribute WishList wishList) {
+        WishList updatedWishList = wishListService.updateWishList(
+                wishList.getWishListId(),
+                wishList
+        );
 
         if (updatedWishList == null) {
-            throw new IllegalArgumentException("Kunne ikke opdatere ønskelisten");
+            throw new IllegalArgumentException("Wishlist kunne ikke opdateres");
         }
 
-        return "redirect:/wishes/" + updatedWishList.getName();
+        return "redirect:/wishlists/user/" + updatedWishList.getUserId();
     }
 }

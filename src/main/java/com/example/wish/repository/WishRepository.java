@@ -17,18 +17,17 @@ public class WishRepository {
 
     public List<Wish> getAllWishes() {
         String sql = """
-                SELECT w.wish_id, w.name, w.description, w.price, w.quantity, w.product_link
-                FROM wish w
-                """;
+            SELECT w.wish_id, w.wish_list_id, w.name, w.description, w.price, w.quantity, w.product_link
+            FROM wish w
+            """;
 
-        List<Wish> wish = jdbcTemplate.query(sql, new WishRowMapper());
+        List<Wish> wishes = jdbcTemplate.query(sql, new WishRowMapper());
 
-        for (Wish w : wish) {
-            w.setTags(getTagsByWishName(w.getName()));
+        for (Wish w : wishes) {
+            w.setTags(getTagsByWishId(w.getId()));
         }
 
-        return wish;
-
+        return wishes;
     }
 
     public void addWish(Wish wish) {
@@ -95,53 +94,39 @@ public class WishRepository {
 
     }
 
-    public boolean updateWish(String name, Wish updatedWish) {
-        Integer wishId = findWishIdByName(name);
+    public boolean updateWish(int wishId, Wish wish) {
+        String sql = """
+        UPDATE wish
+        SET name = ?, description = ?, price = ?, quantity = ?, product_link = ?
+        WHERE wish_id = ?
+    """;
 
-        if (wishId == null) {
-            throw new IllegalArgumentException("Der kunne ikke findes et ønske med det navn");
-        }
-
-        String updateSql = """
-            UPDATE wish
-            SET name = ?, description = ?, price = ?, quantity = ?, product_link = ?
-            WHERE wish_id = ?
-            """;
-
-        int rows = jdbcTemplate.update(updateSql,
-                updatedWish.getName(),
-                updatedWish.getDescription(),
-                updatedWish.getPrice(),
-                updatedWish.getQuantity(),
-                updatedWish.getProductLink(),
-                wishId);
-
-        if (rows == 0) {
-            return false;
-        }
-
-        String deleteTagsSql = "DELETE FROM wish_tag WHERE wish_id = ?";
-        jdbcTemplate.update(deleteTagsSql, wishId);
-
-        String insertTagSql = "INSERT INTO wish_tag (wish_id, tag_id) VALUES (?, ?)";
-        for (String tag : updatedWish.getTags()) {
-            Integer tagId = findTagIdByDescription(tag);
-            if (tagId != null) {
-                jdbcTemplate.update(insertTagSql, wishId, tagId);
-            }
-        }
-
-        return true;
+        return jdbcTemplate.update(sql,
+                wish.getName(),
+                wish.getDescription(),
+                wish.getPrice(),
+                wish.getQuantity(),
+                wish.getProductLink(),
+                wishId
+        ) > 0;
     }
 
-    private Integer findWishIdByName(String wishName) {
-        List<Integer> result = jdbcTemplate.query(
-                "SELECT wish_id FROM wish WHERE name = ?",
-                (rs, rowNum) -> rs.getInt("wish_id"), wishName
-        );
+    public Wish findWishById(int wishId) {
+        String sql = "SELECT * FROM wish WHERE wish_id = ?";
+
+        List<Wish> result = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Wish wish = new Wish();
+            wish.setId(rs.getInt("wish_id"));
+            wish.setWishListId(rs.getInt("wish_list_id"));
+            wish.setName(rs.getString("name"));
+            wish.setDescription(rs.getString("description"));
+            wish.setPrice(rs.getDouble("price"));
+            wish.setQuantity(rs.getInt("quantity"));
+            wish.setProductLink(rs.getString("product_link"));
+            return wish;
+        }, wishId);
 
         return result.isEmpty() ? null : result.get(0);
-
     }
 
     private List<Wish> getWishesByUserId(int userId) {
@@ -174,27 +159,21 @@ public class WishRepository {
 
     }
 
-    public boolean deleteWish(String name) {
-        Integer wishId = findWishIdByName(name);
+    public boolean deleteWish(int wishId) {
+        String sql = "DELETE FROM wish WHERE wish_id = ?";
+        return jdbcTemplate.update(sql, wishId) > 0;
+    }
 
-        if (wishId == null) {
-            return false;
-        }
+    public Integer findWishIdByName(String name) {
+        String sql = "SELECT wish_id FROM wish WHERE name = ? ORDER BY wish_id DESC LIMIT 1";
 
-        String deleteTagsSQL = """
-                DELETE FROM wish_tag
-                    WHERE wish_id = ?
-                """;
-        jdbcTemplate.update(deleteTagsSQL, wishId);
+        List<Integer> result = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> rs.getInt("wish_id"),
+                name
+        );
 
-        String deleteWishSQL = """
-                DELETE FROM wish
-                    WHERE wish_id = ?
-                """;
-
-        int rows = jdbcTemplate.update(deleteWishSQL, wishId);
-
-        return rows > 0;
+        return result.isEmpty() ? null : result.get(0);
     }
 
 }

@@ -31,15 +31,24 @@ public class WishListService{
     public List<WishList> getAllWishLists() {return wishListRepository.getAllWishLists();}
 
     public WishList findWishListById(int wishListId) {
+        return wishListRepository.findWishListById(wishListId);
+    }
 
-        WishList wishList = null;
+    public WishList updateWishList(int wishListId, WishList newValues) {
+        WishList existing = wishListRepository.findWishListById(wishListId);
 
-        for (WishList wl : wishListRepository.getAllWishLists()) {
-            if (wl.getId() = wishListId) {
-                wishList = wl;
-                break;
-            }
+        if (existing == null) {
+            return null;
         }
-        return wishList;
+
+        existing.setName(newValues.getName());
+
+        boolean updated = wishListRepository.updateWishList(wishListId, existing);
+
+        if (!updated) {
+            return null;
+        }
+
+        return existing;
     }
 }
