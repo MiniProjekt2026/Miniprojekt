@@ -10,7 +10,6 @@
 
 <form action="/wishes/update" method="post" th:action="@{/wishes/update}" th:object="${wishList}">
 
-    <!-- Gemmer det gamle navn -->
     <input type="hidden" name="oldname" th:value="${oldName}" />
 
     <label>Navn:</label><br>
@@ -18,6 +17,12 @@
 
     <label>Beskrivelse:</label><br>
     <input type="text" th:field="*{description}" /><br><br>
+
+    <label>Pris:</label><br>
+    <input type="number" step="0.01" th:field="*{price}" /><br><br>
+
+    <label>Antal:</label><br>
+    <input type="number" min="1" th:field="*{quantity}" /><br><br>
 
     <label>Tags:</label><br>
     <select th:field="*{tags}" multiple>
