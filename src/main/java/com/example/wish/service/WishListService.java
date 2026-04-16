@@ -45,8 +45,20 @@ public class WishListService {
         return name.toLowerCase().replaceAll("\\s+", "");
     }
 
-    public void updateWishes() {
+    public WishList updateWishes(String oldname, WishList newWishValues) {
+        WishList existing = findWishListByName(oldname);
+        if(existing==null) return null;
 
+        existing.setName(newWishValues.getName());
+        existing.setDescription(newWishValues.getDescription());
+        existing.setPrice(newWishValues.getPrice());
+        existing.setQuantity(newWishValues.getQuantity());
+        existing.setProductLink(newWishValues.getProductLink());
+
+        boolean updated = wishListRepository.updateWish(oldname, existing);
+        if(!updated) return null;
+
+        return existing;
     }
 
     public WishList deleteWish(String name) {

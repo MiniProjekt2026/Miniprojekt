@@ -60,12 +60,26 @@ public class WishListController {
     }
 
     @GetMapping("/{name}/edit")
-    public void editWish() {
+    public String editWish(@PathVariable String name, Model model) {
+        WishList wishList = wishListService.findWishListByName(name);
 
+        if(wishList==null){
+            throw new IllegalArgumentException("Der finden ikke en ønske med det navn");
+        }
+
+        model.addAttribute("wishList", wishList);
+        model.addAttribute("oldName", name);
+        model.addAttribute("allTags", wishListService.getTags());
+        return "editWish";
     }
 
     @PostMapping("/update")
-    public void updateWishes() {
+    public String updateWishes(@RequestParam String oldname, @ModelAttribute WishList wishList) {
+        WishList updatedWishList = wishListService.updateWishes(oldname, wishList);
+        if(updatedWishList==null){
+            throw new IllegalArgumentException("Der finden ingen ønske");
+        }
+        return "redirect:/wishes/" + updatedWishList.getName();
     }
 
     @PostMapping("/delete/{name}")

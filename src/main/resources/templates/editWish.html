@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Wish</title>
+</head>
+<body>
+
+<h1>Rediger ønskeliste</h1>
+
+<form action="/wishes/update" method="post" th:action="@{/wishes/update}" th:object="${wishList}">
+
+    <!-- Gemmer det gamle navn -->
+    <input type="hidden" name="oldname" th:value="${oldName}" />
+
+    <label>Navn:</label><br>
+    <input type="text" th:field="*{name}" /><br><br>
+
+    <label>Beskrivelse:</label><br>
+    <input type="text" th:field="*{description}" /><br><br>
+
+    <label>Tags:</label><br>
+    <select th:field="*{tags}" multiple>
+        <option th:each="tag : ${allTags}"
+                th:value="${tag}"
+                th:text="${tag}">
+        </option>
+    </select><br><br>
+
+    <button type="submit">Opdater</button>
+
+</form>
+
+</body>
+</html>
