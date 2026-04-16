@@ -26,22 +26,22 @@ public class Wish {
         this.wishListId=wishListId;
     }
 
-    public Wish(int id, String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
-        this.id=id;
-        this.name=name;
-        this.description=description;
-        this.price=price;
-        this.quantity=quantity;
-        this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
-        this.productLink=productLink;
-        this.wishListId=wishListId;
+    public Wish(int id, String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId){
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.tags = (tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
+        this.productLink = productLink;
+        this.wishListId = wishListId;
     }
 
     public int getWishListId() {
         return wishListId;
     }
 
-    public void setUserId(int userId) {
+    public void setWishListId(int wishListId) {
         this.wishListId = wishListId;
     }
 
