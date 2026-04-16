@@ -26,8 +26,6 @@ public class WishListRepository {
         return wishList;
     }
 
-
-
     public WishList findWishListById(int wishListId) {
         String sql = "SELECT * FROM wish_list WHERE wish_list_id = ?";
 
