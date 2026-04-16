@@ -26,42 +26,28 @@ public class WishListRepository {
         return wishList;
     }
 
-    public WishList findWishListByName(String name) {
-        String sql = "SELECT * FROM wish_list WHERE name = ?";
-        try {
-            return jdbcTemplate.queryForObject(sql, new WishListRowMapper(), name);
-        } catch (Exception e) {
-            return null;
-        }
+
+
+    public WishList findWishListById(int wishListId) {
+        String sql = "SELECT * FROM wish_list WHERE wish_list_id = ?";
+
+        List<WishList> result = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            WishList wishList = new WishList();
+            wishList.setWishListId(rs.getInt("wish_list_id"));
+            wishList.setUserId(rs.getInt("user_id"));
+            wishList.setName(rs.getString("name"));
+            return wishList;
+        }, wishListId);
+
+        return result.isEmpty() ? null : result.get(0);
     }
 
-    public boolean updateWishList(String oldName, WishList updatedWishList) {
-        Integer wishListId = findWishListIdByName(oldName);
+    public boolean updateWishList(int wishListId, WishList wishList) {
+        String sql = "UPDATE wish_list SET name = ? WHERE wish_list_id = ?";
 
-        if (wishListId == null) {
-            throw new IllegalArgumentException("Der kunne ikke findes en ønskeliste med det navn");
-        }
-
-        String sql = """
-            UPDATE wish_list
-            SET name = ?
-            WHERE wish_list_id = ?
-            """;
-
-        int rows = jdbcTemplate.update(sql,
-                updatedWishList.getName(),
-                wishListId);
-
-        return rows > 0;
-    }
-
-    public Integer findWishListIdByName(String name) {
-        String sql = "SELECT wish_list_id FROM wish_list WHERE name = ?";
-
-        try {
-            return jdbcTemplate.queryForObject(sql, Integer.class, name);
-        } catch (Exception e) {
-            return null;
-        }
+        return jdbcTemplate.update(sql,
+                wishList.getName(),
+                wishListId
+        ) > 0;
     }
 }

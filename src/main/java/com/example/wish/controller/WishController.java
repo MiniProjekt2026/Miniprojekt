@@ -69,34 +69,44 @@ public class WishController {
         return "tags";
     }
 
-    @GetMapping("/{wishId}/edit")
+    @GetMapping("/edit/{wishId}")
     public String editWish(@PathVariable int wishListId,
                            @PathVariable int wishId,
                            Model model) {
+        Wish wish = wishService.findWishById(wishId);
 
-        List<Wish> wish = wishService.getWishById(wishId);
+        if (wish == null) {
+            throw new IllegalArgumentException("Wish findes ikke");
+        }
+
         model.addAttribute("wish", wish);
+        model.addAttribute("allTags", wishService.getTags());
         model.addAttribute("wishListId", wishListId);
 
         return "editWish";
     }
 
-    @PostMapping("/{wishId}/update")
+    @PostMapping("/update")
     public String updateWish(@PathVariable int wishListId,
-                               @PathVariable int wishId,
-                               @ModelAttribute Wish wish, String oldName) {
+                             @ModelAttribute Wish wish) {
 
-        wishService.updateWish(oldName, wish);
+        Wish updated = wishService.updateWish(wish.getId(), wish);
 
-        return "redirect:/wishlists/" + wishListId;
+        if (updated == null) {
+            throw new IllegalArgumentException("Kunne ikke opdatere wish");
+        }
+
+        return "redirect:/wishlists/" + updated.getWishListId() + "/wishes";
     }
-
-    @PostMapping("/{wishId}/delete")
+    @PostMapping("/delete/{wishId}")
     public String deleteWish(@PathVariable int wishListId,
                              @PathVariable int wishId) {
+        Wish deleted = wishService.deleteWish(wishId);
 
-        wishService.deleteWish(String.valueOf(wishId));
+        if (deleted == null) {
+            throw new IllegalArgumentException("Wish findes ikke");
+        }
 
-        return "redirect:/wishlists/" + wishListId;
+        return "redirect:/wishlists/" + deleted.getWishListId() + "/wishes";
     }
 }

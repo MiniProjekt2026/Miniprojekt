@@ -15,19 +15,26 @@ public class WishListService{
 
     public List<WishList> getAllWishLists() {return wishListRepository.getAllWishLists();}
 
-    public WishList findWishListByName(String name) {
-        String normalizedInput = normalize(name);
-        WishList wishList = null;
+    public WishList findWishListById(int wishListId) {
+        return wishListRepository.findWishListById(wishListId);
+    }
 
-        for (WishList wl : wishListRepository.getAllWishLists()) {
-            if (normalize(wl.getName()).equals(normalizedInput)) {
-                wishList = wl;
-                break;
-            }
+    public WishList updateWishList(int wishListId, WishList newValues) {
+        WishList existing = wishListRepository.findWishListById(wishListId);
+
+        if (existing == null) {
+            return null;
         }
-        return wishList;
+
+        existing.setName(newValues.getName());
+
+        boolean updated = wishListRepository.updateWishList(wishListId, existing);
+
+        if (!updated) {
+            return null;
+        }
+
+        return existing;
     }
-    private String normalize(String name) {
-        return name.toLowerCase().replaceAll("\\s+", "");
-    }
+}
 }

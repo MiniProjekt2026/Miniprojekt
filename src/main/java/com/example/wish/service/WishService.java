@@ -28,53 +28,39 @@ public class WishService {
         return wishRepository.getTags();
     }
 
-    public Wish findWishByName(String name) {
-        String normalizedInput = normalize(name);
-        Wish wish = null;
-
-        for (Wish w : wishRepository.getAllWishes()) {
-            if (normalize(w.getName()).equals(normalizedInput)) {
-                wish = w;
-                break;
-            }
-        }
-        return wish;
+    public Wish findWishById(int wishId) {
+        return wishRepository.findWishById(wishId);
     }
 
-    private String normalize(String name) {
-        return name.toLowerCase().replaceAll("\\s+", "");
-    }
+    public Wish updateWish(int wishId, Wish newValues) {
+        Wish existing = wishRepository.findWishById(wishId);
 
-    public Wish updateWish(String oldname, Wish newWishValues) {
-        Wish existing = findWishByName(oldname);
-        if(existing==null) return null;
-
-        existing.setName(newWishValues.getName());
-        existing.setDescription(newWishValues.getDescription());
-        existing.setPrice(newWishValues.getPrice());
-        existing.setQuantity(newWishValues.getQuantity());
-        existing.setProductLink(newWishValues.getProductLink());
-
-        boolean updated = wishRepository.updateWish(oldname, existing);
-        if(!updated) return null;
-
-        return existing;
-    }
-
-    public Wish deleteWish(String name) {
-        Wish wish = findWishByName(name);
-
-        if (wish == null) {
+        if (existing == null) {
             return null;
         }
 
-        boolean deleted = wishRepository.deleteWish(name);
+        existing.setName(newValues.getName());
+        existing.setDescription(newValues.getDescription());
+        existing.setPrice(newValues.getPrice());
+        existing.setQuantity(newValues.getQuantity());
+        existing.setProductLink(newValues.getProductLink());
+        existing.setTags(newValues.getTags());
 
-        if (!deleted) {
+        boolean updated = wishRepository.updateWish(wishId, existing);
+
+        return updated ? existing : null;
+    }
+
+    public Wish deleteWish(int wishId) {
+        Wish existing = wishRepository.findWishById(wishId);
+
+        if (existing == null) {
             return null;
         }
 
-        return wish;
+        boolean deleted = wishRepository.deleteWish(wishId);
+
+        return deleted ? existing : null;
     }
 
     public void getWishByWishId() {
