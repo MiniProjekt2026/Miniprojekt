@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class WishListRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -26,6 +27,22 @@ public class WishListRepository {
         return wishList;
     }
 
+    public WishList findWishListByUserId(int userId) {
+        String sql = """
+                SELECT * FROM wish_list WHERE userId = ?
+                """;
+
+        List<WishList> result = jdbcTemplate.query(sql,(rs, rowNum) -> {
+            WishList wishList = new WishList();
+            wishList.setWishListId(rs.getInt("wish_list_id"));
+            wishList.setUserId(rs.getInt("user_id"));
+            wishList.setName(rs.getString("name"));
+            return wishList;
+        }, userId);
+
+        return result.isEmpty() ? null : result.get(0);
+    }
+
     public WishList findWishListById(int wishListId) {
         String sql = "SELECT * FROM wish_list WHERE wish_list_id = ?";
 
@@ -36,6 +53,24 @@ public class WishListRepository {
             wishList.setName(rs.getString("name"));
             return wishList;
         }, wishListId);
+
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    public WishList findWishListByIdAndUserId(int userId, int wishListId) {
+        String sql = """
+            SELECT * 
+            FROM wish_list 
+            WHERE user_id = ? AND wish_list_id = ?
+            """;
+
+        List<WishList> result = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            WishList wishList = new WishList();
+            wishList.setWishListId(rs.getInt("wish_list_id"));
+            wishList.setUserId(rs.getInt("user_id"));
+            wishList.setName(rs.getString("name"));
+            return wishList;
+        }, userId, wishListId);
 
         return result.isEmpty() ? null : result.get(0);
     }
