@@ -1,58 +1,58 @@
 package com.example.wish.repository;
 
-import com.example.wish.model.WishList;
+import com.example.wish.model.Wish;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class WishListRepository {
+public class WishRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public WishListRepository(JdbcTemplate jdbcTemplate) {
+    public WishRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<WishList> getAllWishes() {
+    public List<Wish> getAllWishes() {
         String sql = """
-                SELECT wl.wish_id, wl.name, wl.description, wl.price, wl.quantity, wl.product_link
-                FROM wish_list wl
+                SELECT w.wish_id, w.name, w.description, w.price, w.quantity, w.product_link
+                FROM wish w
                 """;
 
-        List<WishList> wishList = jdbcTemplate.query(sql, new WishListRowMapper());
+        List<Wish> wish = jdbcTemplate.query(sql, new WishRowMapper());
 
-        for (WishList wishlist : wishList) {
-            wishlist.setTags(getTagsByWishName(wishlist.getName()));
+        for (Wish w : wish) {
+            w.setTags(getTagsByWishName(w.getName()));
         }
 
-        return wishList;
+        return wish;
 
     }
 
-    public void addWish(WishList wishList) {
-        String sqlWish = "INSERT INTO wish_list(name, description, price, quantity, product_link, user_id) VALUES (?,?,?,?,?,?)";
+    public void addWish(Wish wish) {
+        String sqlWish = "INSERT INTO wish(name, description, price, quantity, product_link, wish_list_id) VALUES (?,?,?,?,?,?)";
         jdbcTemplate.update(sqlWish,
-                wishList.getName(),
-                wishList.getDescription(),
-                wishList.getPrice(),
-                wishList.getQuantity(),
-                wishList.getProductLink(),
-                wishList.getUserId()
+                wish.getName(),
+                wish.getDescription(),
+                wish.getPrice(),
+                wish.getQuantity(),
+                wish.getProductLink(),
+                wish.getWishListId()
         );
 
-        Integer wishId = findWishIdByName(wishList.getName());
+        Integer wishId = findWishIdByName(wish.getName());
 
         if (wishId == null) {
             throw new IllegalArgumentException("Ønsket blev oprettet, men wish_id kunne ikke findes");
         }
 
-        for (String tag : wishList.getTags()) {
+        for (String tag : wish.getTags()) {
             Integer tagId = findTagIdByDescription(tag);
 
             if (tagId != null) {
-                jdbcTemplate.update("INSERT INTO wish_list_tags (tag_id, wish_id) VALUES (?, ?)",
+                jdbcTemplate.update("INSERT INTO wish_tags (tag_id, wish_id) VALUES (?, ?)",
                         tagId,
                         wishId
                 );
@@ -71,9 +71,9 @@ public class WishListRepository {
     public List<String> getTagsByWishName(String name) {
         String sql = """
                 SELECT t.tag_name
-                FROM tags t
-                JOIN wish_list_tag tat ON t.tag_id = tat.tag_id
-                JOIN wish_list ta ON tat.wish_id = ta.wish_id
+                FROM tag t
+                JOIN wish_tag tat ON t.tag_id = tat.tag_id
+                JOIN wish ta ON tat.wish_id = ta.wish_id
                 WHERE ta.name = ?
                 """;
 
@@ -86,7 +86,7 @@ public class WishListRepository {
 
     public Integer findTagIdByDescription(String TagName) {
         List<Integer> result = jdbcTemplate.query(
-                "SELECT tag_id FROM tags WHERE tag_description = ?",
+                "SELECT tag_id FROM tag WHERE tag_description = ?",
                 (rs, rowNum) -> rs.getInt("tag_id"),
                 TagName
         );
@@ -95,7 +95,7 @@ public class WishListRepository {
 
     }
 
-    public boolean updateWish(String name, WishList updatedWishList) {
+    public boolean updateWish(String name, Wish updatedWish) {
         Integer wishId = findWishIdByName(name);
 
         if (wishId==null){
@@ -103,24 +103,24 @@ public class WishListRepository {
         }
 
         String updateSql = """
-                UPDATE wish_list
+                UPDATE wish
                 SET NAME = ?, DESCRIPTION = ?, PRICE = ?, QUANTITY = ?, PRODUCT_LINK = ?
                 WHERE wish_id=?
                 """;
 
         int rows = jdbcTemplate.update(updateSql,
-                updatedWishList.getName(),
-                updatedWishList.getDescription(),
-                updatedWishList.getPrice(),
-                updatedWishList.getQuantity(),
-                updatedWishList.getProductLink());
+                updatedWish.getName(),
+                updatedWish.getDescription(),
+                updatedWish.getPrice(),
+                updatedWish.getQuantity(),
+                updatedWish.getProductLink());
 
         if (rows==0){
             return false;
         }
 
-        String insertTagSql = "INSERT INTO wish_list_tag (tag_id, wish_id) VALUES (?,?)";
-        for (String tag : updatedWishList.getTags()){
+        String insertTagSql = "INSERT INTO wish_tag (tag_id, wish_id) VALUES (?,?)";
+        for (String tag : updatedWish.getTags()){
             Integer tagId = findTagIdByDescription(tag);
             if(tagId != null){
                 jdbcTemplate.update(insertTagSql, tagId, wishId);
@@ -131,7 +131,7 @@ public class WishListRepository {
 
     private Integer findWishIdByName(String wishName) {
         List<Integer> result = jdbcTemplate.query(
-                "SELECT wish_id FROM wish_list WHERE name = ?",
+                "SELECT wish_id FROM wish WHERE name = ?",
                 (rs, rowNum) -> rs.getInt("wish_id"), wishName
         );
 
@@ -139,19 +139,19 @@ public class WishListRepository {
 
     }
 
-    private List<WishList> getWishesByUserId(int userId) {
+    private List<Wish> getWishesByUserId(int userId) {
         String sql = """
                 SELECT wish_id, name, description, price, quantity, product_link, user_id
-                FROM wish_list
+                FROM wish
                 WHERE user_id = ?
                 """;
 
-        List<WishList> wishList = jdbcTemplate.query(sql, new WishListRowMapper(), userId);
+        List<Wish> wish = jdbcTemplate.query(sql, new WishRowMapper(), userId);
 
-        for (WishList wish : wishList) {
-            wish.setTags(getTagsByWishId(wish.getId()));
+        for (Wish w : wish) {
+            w.setTags(getTagsByWishId(w.getId()));
         }
-        return wishList;
+        return wish;
     }
 
 
@@ -159,7 +159,7 @@ public class WishListRepository {
         String sql = """
                   SELECT t.tag_name
                             FROM tag t
-                            JOIN wish_list_tag wlt ON t.tag_id = wlt.tag_id
+                            JOIN wish_tag wlt ON t.tag_id = wlt.tag_id
                             WHERE wlt.wish_id = ?
                 """;
 
@@ -177,17 +177,17 @@ public class WishListRepository {
         }
 
         String deleteTagsSQL = """
-                DELETE FROM wish_list_tag
+                DELETE FROM wish_tag
                     WHERE wish_id = ?
                 """;
         jdbcTemplate.update(deleteTagsSQL, wishId);
 
-        String deleteWishListSQL = """
-                DELETE FROM wish_list
+        String deleteWishSQL = """
+                DELETE FROM wish
                     WHERE wish_id = ?
                 """;
 
-        int rows = jdbcTemplate.update(deleteWishListSQL, wishId);
+        int rows = jdbcTemplate.update(deleteWishSQL, wishId);
 
         return rows > 0;
     }
