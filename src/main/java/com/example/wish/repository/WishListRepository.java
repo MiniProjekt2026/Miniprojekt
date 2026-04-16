@@ -95,8 +95,38 @@ public class WishListRepository {
 
     }
 
-    public void updateWish() {
+    public boolean updateWish(String name, WishList updatedWishList) {
+        Integer wishId = findWishIdByName(name);
 
+        if (wishId==null){
+            throw new IllegalArgumentException("Der kunne ikke findes et ønske med det id");
+        }
+
+        String updateSql = """
+                UPDATE wish_list
+                SET NAME = ?, DESCRIPTION = ?, PRICE = ?, QUANTITY = ?, PRODUCT_LINK = ?
+                WHERE wish_id=?
+                """;
+
+        int rows = jdbcTemplate.update(updateSql,
+                updatedWishList.getName(),
+                updatedWishList.getDescription(),
+                updatedWishList.getPrice(),
+                updatedWishList.getQuantity(),
+                updatedWishList.getProductLink());
+
+        if (rows==0){
+            return false;
+        }
+
+        String insertTagSql = "INSERT INTO wish_list_tag (tag_id, wish_id) VALUES (?,?)";
+        for (String tag : updatedWishList.getTags()){
+            Integer tagId = findTagIdByDescription(tag);
+            if(tagId != null){
+                jdbcTemplate.update(insertTagSql, tagId, wishId);
+            }
+        }
+        return true;
     }
 
     private Integer findWishIdByName(String wishName) {
