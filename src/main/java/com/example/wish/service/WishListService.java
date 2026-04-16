@@ -14,24 +14,18 @@ public class WishListService{
         this.wishListRepository = wishListRepository;
     }
 
-    public WishList findWishListByName(String name) {
-        return wishListRepository.findWishListByName(name);
-    }
-
-    public WishList updateWishList(String oldName, WishList wishList) {
-        boolean updated = wishListRepository.updateWishList(oldName, wishList);
-
-        if (!updated) {
-            return null;
-        }
-
-        return wishListRepository.findWishListByName(wishList.getName());
-    }
-
     public List<WishList> getAllWishLists() {return wishListRepository.getAllWishLists();}
 
     public WishList findWishListById(int wishListId) {
         return wishListRepository.findWishListById(wishListId);
+    }
+
+    public WishList findWishListByUserId(int userId) {
+        return wishListRepository.findWishListByUserId(userId);
+    }
+
+    public WishList findWishListByIdAndUserId(int userId, int wishListId) {
+        return wishListRepository.findWishListByIdAndUserId(userId, wishListId);
     }
 
     public WishList updateWishList(int wishListId, WishList newValues) {
