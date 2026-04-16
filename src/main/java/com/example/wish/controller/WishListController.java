@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("wishlists")
 public class WishListController {
-
     private final WishListService wishListService;
 
     public WishListController(WishListService wishListService) {
@@ -27,5 +26,32 @@ public class WishListController {
 
         model.addAttribute("wishlist", wishList);
        return "wishlist";
+
+
+    @GetMapping("/{name}/edit")
+    public String editWishList(@PathVariable String name, Model model) {
+        WishList wishList = wishListService.findWishListByName(name);
+
+        if (wishList == null) {
+            throw new IllegalArgumentException("Der findes ingen ønskeliste med det navn");
+        }
+
+        model.addAttribute("wishList", wishList);
+        model.addAttribute("oldName", name);
+
+        return "editWishList";
+    }
+
+    @PostMapping("/update")
+    public String updateWishList(@RequestParam String oldname,
+                                 @ModelAttribute WishList wishList) {
+
+        WishList updatedWishList = wishListService.updateWishList(oldname, wishList);
+
+        if (updatedWishList == null) {
+            throw new IllegalArgumentException("Kunne ikke opdatere ønskelisten");
+        }
+
+        return "redirect:/wishes/" + updatedWishList.getName();
     }
 }
