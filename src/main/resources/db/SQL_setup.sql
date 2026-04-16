@@ -8,14 +8,15 @@ select database();
 
 SET
 FOREIGN_KEY_CHECKS = 0;
-drop table if exists wish_list_tag;
+drop table if exists wish_tag;
 drop table if exists tag;
-drop table if exists wish_list;
+drop table if exists wish;
 drop table if exists user;
+drop table if exists wish_list;
 SET
 FOREIGN_KEY_CHECKS = 1;
 
-create table wish_list
+create table wish
 (
     wish_id      int AUTO_INCREMENT primary key,
     name         VARCHAR(255) not null,
@@ -23,7 +24,7 @@ create table wish_list
     price double,
     quantity     int,
     product_link VARCHAR(255),
-    foreign key (user_id) REFERENCES user (user_id) ON DELETE CASCADE
+    foreign key (wish_list_id) REFERENCES user (wish_list_id) ON DELETE CASCADE
 );
 
 create table tag
@@ -32,7 +33,7 @@ create table tag
     tag_name VARCHAR(255)
 );
 
-create table wish_list_tag
+create table wish_tag
 (
     wish_id int AUTO_INCREMENT primary key,
     tag_id  int AUTO_INCREMENT primary key,
@@ -47,4 +48,10 @@ create table user
     password VARCHAR(25) NOT NULL
 );
 
+create table wish_list
+(
+    wish_list_id      int AUTO_INCREMENT primary key,
+    name         VARCHAR(255) not null,
+    foreign key (user_id) REFERENCES user (user_id) ON DELETE CASCADE
+);
 

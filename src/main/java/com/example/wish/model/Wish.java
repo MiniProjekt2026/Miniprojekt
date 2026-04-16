@@ -3,7 +3,7 @@ package com.example.wish.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WishList {
+public class Wish {
     private int id;
     private String name;
     private String description;
@@ -11,22 +11,22 @@ public class WishList {
     private int quantity;
     private List<String> tags = new ArrayList<>();
     private String productLink;
-    private int userId;
+    private int wishListId;
 
-    public WishList() {
+    public Wish() {
     }
 
-    public WishList(String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
+    public Wish(String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId){
         this.name=name;
         this.description=description;
         this.price=price;
         this.quantity=quantity;
         this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
         this.productLink=productLink;
-        this.userId=userId;
+        this.wishListId=wishListId;
     }
 
-    public WishList(int id, String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
+    public Wish(int id, String name, String description, double price, int quantity, List<String> tags, String productLink, int userId){
         this.id=id;
         this.name=name;
         this.description=description;
@@ -34,15 +34,15 @@ public class WishList {
         this.quantity=quantity;
         this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
         this.productLink=productLink;
-        this.userId=userId;
+        this.wishListId=wishListId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getWishListId() {
+        return wishListId;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.wishListId = wishListId;
     }
 
     public int getId() {

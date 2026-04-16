@@ -7,9 +7,9 @@
 <body>
 
 <nav>
-    <a href="/">Forside</a>
-    <a href="/wishes">Ønsker</a>
-    <a th:href="@{/wishes/add}">+ Tilføj</a>
+    <a th:href="@{/wishlists/{id}(id=${wishListId})}">Ønsker</a>
+    <a th:href="@{/wishlists/{id}/wishes/add(id=${wishListId})}">+ Tilføj</a>
+    <a th:href="@{/wishlists/{id}(id=${wishListId})}">← Tilbage</a>
 </nav>
 
 
@@ -20,7 +20,9 @@
         <h1>Tilføj nyt ønske</h1>
 
 
-        <form th:action="@{/wishes/save}" th:object="${wishList}" method="post">
+        <form th:action="@{/wishlists/{id}/wishes/save(id=${wishListId})}"
+              th:object="${wish}"
+              method="post">
 
             <div>
                 <label for="name">Navn</label>
@@ -38,8 +40,9 @@
             </div>
 
             <div class="stepper">
+                <label>Antal</label>
                 <button type="button"  onclick="decrease()">−</button>
-                <input type="number" id="quantity" th:field="*{quantity}" min="0">
+                <label for="quantity"></label><input type="number" id="quantity" th:field="*{quantity}" min="0">
                 <button type="button" onclick="increase()">+</button>
             </div>
 

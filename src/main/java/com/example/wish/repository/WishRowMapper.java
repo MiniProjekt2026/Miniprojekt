@@ -1,17 +1,17 @@
 package com.example.wish.repository;
 
-import com.example.wish.model.WishList;
+import com.example.wish.model.Wish;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 
-public class WishListRowMapper implements RowMapper<WishList> {
+public class WishRowMapper implements RowMapper<Wish> {
 
     @Override
-    public WishList mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new WishList(
+    public Wish mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new Wish(
                 rs.getInt("wish_id"),
                 rs.getString("name"),
                 rs.getString("description"),
@@ -19,7 +19,7 @@ public class WishListRowMapper implements RowMapper<WishList> {
                 rs.getInt("quantity"),
                 new ArrayList<>(),
                 rs.getString("product_link"),
-                rs.getInt("user_id")
+                rs.getInt("wish_list_id")
         );
     }
 }
