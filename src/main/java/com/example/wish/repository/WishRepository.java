@@ -98,34 +98,39 @@ public class WishRepository {
     public boolean updateWish(String name, Wish updatedWish) {
         Integer wishId = findWishIdByName(name);
 
-        if (wishId==null){
-            throw new IllegalArgumentException("Der kunne ikke findes et ønske med det id");
+        if (wishId == null) {
+            throw new IllegalArgumentException("Der kunne ikke findes et ønske med det navn");
         }
 
         String updateSql = """
-                UPDATE wish
-                SET NAME = ?, DESCRIPTION = ?, PRICE = ?, QUANTITY = ?, PRODUCT_LINK = ?
-                WHERE wish_id=?
-                """;
+            UPDATE wish
+            SET name = ?, description = ?, price = ?, quantity = ?, product_link = ?
+            WHERE wish_id = ?
+            """;
 
         int rows = jdbcTemplate.update(updateSql,
                 updatedWish.getName(),
                 updatedWish.getDescription(),
                 updatedWish.getPrice(),
                 updatedWish.getQuantity(),
-                updatedWish.getProductLink());
+                updatedWish.getProductLink(),
+                wishId);
 
-        if (rows==0){
+        if (rows == 0) {
             return false;
         }
 
-        String insertTagSql = "INSERT INTO wish_tag (tag_id, wish_id) VALUES (?,?)";
-        for (String tag : updatedWish.getTags()){
+        String deleteTagsSql = "DELETE FROM wish_tag WHERE wish_id = ?";
+        jdbcTemplate.update(deleteTagsSql, wishId);
+
+        String insertTagSql = "INSERT INTO wish_tag (wish_id, tag_id) VALUES (?, ?)";
+        for (String tag : updatedWish.getTags()) {
             Integer tagId = findTagIdByDescription(tag);
-            if(tagId != null){
-                jdbcTemplate.update(insertTagSql, tagId, wishId);
+            if (tagId != null) {
+                jdbcTemplate.update(insertTagSql, wishId, tagId);
             }
         }
+
         return true;
     }
 
