@@ -2,35 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Rediger wishlist</title>
+    <title>Rediger ønskeliste – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-<header>
-    <h1>Wish App</h1>
-    <nav>
-        <a th:href="@{/}">Forside</a>
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Øske<span>skyen</span></a>
+    <div class="navbar-links">
         <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">Mine ønskelister</a>
-    </nav>
-    <hr>
-</header>
+    </div>
+</nav>
 
-<main>
-    <h2>Rediger wishlist</h2>
+<div class="page-wrapper">
+    <a class="back-link" th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wishList.wishListId})}">
+        ← Tilbage til ønskelisten
+    </a>
 
-    <form th:action="@{/users/{userId}/wishlists/{wishListId}/update(userId=${userId}, wishListId=${wishList.wishListId})}"
-          method="post"
-          th:object="${wishList}">
+    <div class="page-header" style="margin-top:1rem">
+        <h1>Rediger ønskeliste</h1>
+    </div>
 
-        <input type="hidden" th:field="*{wishListId}">
-        <input type="hidden" th:field="*{userId}">
+    <div class="form-card">
+        <form th:action="@{/users/{userId}/wishlists/{wishListId}/update(userId=${userId}, wishListId=${wishList.wishListId})}"
+              method="post"
+              th:object="${wishList}">
 
-        <label>Navn</label><br>
-        <input type="text" th:field="*{name}"><br><br>
+            <input type="hidden" th:field="*{wishListId}" />
+            <input type="hidden" th:field="*{userId}" />
 
-        <button type="submit">Gem ændringer</button>
-    </form>
-</main>
+            <div class="form-group">
+                <label for="name">Navn på ønskelisten</label>
+                <input type="text" id="name" th:field="*{name}" required autofocus />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Gem ændringer</button>
+                <a class="btn btn-secondary"
+                   th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wishList.wishListId})}">
+                    Annuller
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
 </body>
 </html>

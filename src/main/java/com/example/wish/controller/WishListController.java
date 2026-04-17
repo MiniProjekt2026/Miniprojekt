@@ -31,7 +31,7 @@ public class WishListController {
 
     @PostMapping("/save")
     public String saveWishList(@PathVariable int userId,
-                             @ModelAttribute("wishList") WishList wishList) {
+                               @ModelAttribute("wish_list") WishList wishList){
 
         wishList.setUserId(userId); // enforce relationship
         wishListService.addWishList(wishList);
@@ -41,7 +41,7 @@ public class WishListController {
 
 
     @GetMapping("/{wishListId}/edit")
-    public String editWishList(@PathVariable int userId,@PathVariable int wishListId, Model model) {
+    public String editWishList(@PathVariable int userId, @PathVariable int wishListId, Model model) {
         WishList wishList = wishListService.findWishListByIdAndUserId(userId, wishListId);
 
         if (wishList == null) {

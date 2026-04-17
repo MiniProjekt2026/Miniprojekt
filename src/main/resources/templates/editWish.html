@@ -2,53 +2,96 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Wish</title>
+    <title>Rediger ønske – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-<header>
-    <h1>Wish App</h1>
-    <nav>
-        <a th:href="@{/}">Forside</a>
-    </nav>
-    <hr>
-</header>
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/wishlists/{id}(id=${wishListId})}">Øske<span>skyen</span></a>
+    <div class="navbar-links">
+        <a th:href="@{/wishlists/{id}(id=${wishListId})}">← Tilbage til listen</a>
+    </div>
+</nav>
 
-<main>
-    <h2>Rediger wish</h2>
+<div class="page-wrapper">
+    <a class="back-link" th:href="@{/wishlists/{id}(id=${wishListId})}">← Tilbage til ønskelisten</a>
 
-    <form th:action="@{/wishlists/{wishListId}/wishes/update(wishListId=${wishListId})}" method="post" th:object="${wish}">
+    <div class="page-header" style="margin-top:1rem">
+        <h1>Rediger ønske</h1>
+    </div>
 
-        <input type="hidden" th:field="*{id}" />
-        <input type="hidden" th:field="*{wishListId}" />
+    <div class="form-card">
+        <form th:action="@{/wishlists/{wishListId}/wishes/update(wishListId=${wishListId})}"
+              method="post"
+              th:object="${wish}">
 
-        <label>Navn:</label><br>
-        <input type="text" th:field="*{name}" /><br><br>
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{wishListId}" />
 
-        <label>Beskrivelse:</label><br>
-        <input type="text" th:field="*{description}" /><br><br>
+            <div class="form-group">
+                <label for="name">Navn *</label>
+                <input type="text" id="name" th:field="*{name}" required autofocus />
+            </div>
 
-        <label>Pris:</label><br>
-        <input type="number" step="0.01" th:field="*{price}" /><br><br>
+            <div class="form-group">
+                <label for="description">Beskrivelse</label>
+                <textarea id="description" th:field="*{description}"></textarea>
+            </div>
 
-        <label>Antal:</label><br>
-        <input type="number" min="1" th:field="*{quantity}" /><br><br>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                <div class="form-group">
+                    <label for="price">Pris (kr.)</label>
+                    <input type="number" id="price" th:field="*{price}" step="0.01" min="0" />
+                </div>
 
-        <label>Tags:</label><br>
-        <select th:field="*{tags}" multiple>
-            <option th:each="tag : ${allTags}"
-                    th:value="${tag}"
-                    th:text="${tag}">
-            </option>
-        </select><br><br>
+                <div class="form-group">
+                    <label>Antal</label>
+                    <div class="stepper-group">
+                        <button type="button" class="stepper-btn" onclick="decrease()">−</button>
+                        <input type="number" id="quantity" th:field="*{quantity}" min="1" />
+                        <button type="button" class="stepper-btn" onclick="increase()">+</button>
+                    </div>
+                </div>
+            </div>
 
-        <label>Produktlink:</label><br>
-        <input type="text" th:field="*{productLink}" /><br><br>
+            <div class="form-group">
+                <label>Tags</label>
+                <div class="tag-checkboxes">
+                    <th:block th:each="tag : ${allTags}">
+                        <input type="checkbox" class="tag-checkbox"
+                               th:id="'tag-' + ${tag}"
+                               th:field="*{tags}"
+                               th:value="${tag}" />
+                        <label class="tag-label" th:for="'tag-' + ${tag}" th:text="${tag}"></label>
+                    </th:block>
+                </div>
+            </div>
 
-        <button type="submit">Opdater</button>
+            <div class="form-group">
+                <label for="productLink">Produktlink</label>
+                <input type="text" id="productLink" th:field="*{productLink}"
+                       placeholder="https://..." />
+            </div>
 
-    </form>
-</main>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Gem ændringer</button>
+                <a class="btn btn-secondary" th:href="@{/wishlists/{id}(id=${wishListId})}">Annuller</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function increase() {
+        const input = document.getElementById("quantity");
+        input.value = parseInt(input.value || 1) + 1;
+    }
+    function decrease() {
+        const input = document.getElementById("quantity");
+        if (parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
+    }
+</script>
 
 </body>
 </html>

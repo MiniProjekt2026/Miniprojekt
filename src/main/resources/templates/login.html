@@ -1,17 +1,40 @@
-<form th:action="@{/user/login}" method="post">
-    <label>Username:</label>
-    <input type="text" name="username" />
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Log ind – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
 
-    <br><br>
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <h1>Ønskeskyen</h1>
+            <p>Log ind for at se dine ønskelister</p>
+        </div>
 
-    <label>Password:</label>
-    <input type="password" name="password" />
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-    <br><br>
+        <form th:action="@{/user/login}" method="post">
+            <div class="form-group">
+                <label for="username">Brugernavn</label>
+                <input type="text" id="username" name="username" placeholder="Dit brugernavn" required autofocus />
+            </div>
 
-    <button type="submit">Login</button>
-</form>
+            <div class="form-group">
+                <label for="password">Adgangskode</label>
+                <input type="password" id="password" name="password" placeholder="Din adgangskode" required />
+            </div>
 
-<p th:if="${error}" th:text="${error}"></p>
+            <button type="submit" class="btn btn-primary btn-block">Log ind</button>
+        </form>
 
-<a th:href="@{/user/createUser}">Opret ny bruger</a>
+        <div class="auth-footer">
+            Har du ikke en konto? <a th:href="@{/user/createUser}">Opret bruger</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

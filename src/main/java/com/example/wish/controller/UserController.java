@@ -40,13 +40,12 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginUser(@RequestParam String username, @RequestParam String password, Model model) {
+        User user = userService.findByUsername(username);
 
-        boolean isValidUser = userService.login(username, password);
-
-        if (isValidUser) {
-            return "redirect:/wishlist/" + username;
+        if (user != null && userService.login(username, password)) {
+            return "redirect:/users/" + user.getUserId() + "/wishlists";
         } else {
-            model.addAttribute("error", "Forkert username eller password");
+            model.addAttribute("error", "Forkert brugernavn eller adgangskode");
             return "login";
         }
     }

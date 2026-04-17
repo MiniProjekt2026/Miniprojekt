@@ -2,47 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Wishlists</title>
+    <title>Mine ønskelister – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-<header>
-    <h1>Wish App</h1>
-    <nav>
-        <a th:href="@{/}">Forside</a>
-    </nav>
-    <hr>
-</header>
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Øske<span>skyen</span></a>
+    <div class="navbar-links">
+        <span style="font-size:13px;color:var(--text-muted);">Mine lister</span>
+    </div>
+</nav>
 
-<main>
-    <h2>Mine ønskelister</h2>
-
-    <div th:if="${wishlists != null and !wishlists.isEmpty()}">
-        <div th:each="wl : ${wishlists}">
-            <p>
-                <strong th:text="${wl.name}">Wishlist navn</strong>
-            </p>
-
-            <a th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wl.wishListId})}">
-                Åbn ønskeliste
+<div class="page-wrapper">
+    <div class="top-row">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>Mine ønskelister</h1>
+            <p>Administrer dine ønskelister</p>
+        </div>
+        <div class="section-actions">
+            <a class="btn btn-primary" th:href="@{/users/{userId}/wishlists/add(userId=${userId})}">
+                + Ny ønskeliste
             </a>
-
-            <a th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${userId}, wishListId=${wl.wishListId})}">
-                Rediger liste
-            </a>
-
-            <form th:action="@{/users/{userId}/wishlists/{wishListId}/delete(userId=${userId}, wishListId=${wl.wishListId})}" method="post">
-                <button type="submit">Slet liste</button>
-            </form>
-
-            <hr>
         </div>
     </div>
 
-    <div th:if="${wishlists == null or wishlists.isEmpty()}">
-        <p>Ingen ønskelister fundet.</p>
+    <div th:if="${wishlists != null and !wishlists.isEmpty()}" class="wishlist-grid">
+        <div th:each="wl : ${wishlists}" class="wishlist-card">
+            <div class="wishlist-card-info">
+                <h3 th:text="${wl.name}">Ønskeliste navn</h3>
+                <p th:if="${wl.wishes != null}" th:text="${#lists.size(wl.wishes)} + ' ønsker'">0 ønsker</p>
+            </div>
+            <div class="wishlist-card-actions">
+                <a class="btn btn-secondary btn-sm"
+                   th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${userId}, wishListId=${wl.wishListId})}">
+                    Rediger
+                </a>
+                <a class="btn btn-primary btn-sm"
+                   th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wl.wishListId})}">
+                    Åbn
+                </a>
+                <form th:action="@{/users/{userId}/wishlists/{wishListId}/delete(userId=${userId}, wishListId=${wl.wishListId})}"
+                      method="post" style="display:inline"
+                      onsubmit="return confirm('Er du sikker på du vil slette listen?')">
+                    <button type="submit" class="btn btn-danger btn-sm">Slet</button>
+                </form>
+            </div>
+        </div>
     </div>
-</main>
+
+    <div th:if="${wishlists == null or wishlists.isEmpty()}" class="empty-state card">
+        <span class="icon">☁️</span>
+        <h3>Ingen ønskelister endnu</h3>
+        <p>Opret din første ønskeliste og begynd at tilføje ønsker</p>
+        <a class="btn btn-primary" th:href="@{/users/{userId}/wishlists/add(userId=${userId})}">
+            + Opret ønskeliste
+        </a>
+    </div>
+</div>
 
 </body>
 </html>
