@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Rediger wishlist</title>
+</head>
+<body>
+
+<header>
+    <h1>Wish App</h1>
+    <nav>
+        <a th:href="@{/}">Forside</a>
+        <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">Mine ønskelister</a>
+    </nav>
+    <hr>
+</header>
+
+<main>
+    <h2>Rediger wishlist</h2>
+
+    <form th:action="@{/users/{userId}/wishlists/{wishListId}/update(userId=${userId}, wishListId=${wishList.wishListId})}"
+          method="post"
+          th:object="${wishList}">
+
+        <input type="hidden" th:field="*{wishListId}">
+        <input type="hidden" th:field="*{userId}">
+
+        <label>Navn</label><br>
+        <input type="text" th:field="*{name}"><br><br>
+
+        <button type="submit">Gem ændringer</button>
+    </form>
+</main>
+
+</body>
+</html>

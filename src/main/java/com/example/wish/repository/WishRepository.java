@@ -159,9 +159,9 @@ public class WishRepository {
 
     }
 
-    public boolean deleteWish(int wishId) {
-        String sql = "DELETE FROM wish WHERE wish_id = ?";
-        return jdbcTemplate.update(sql, wishId) > 0;
+    public boolean deleteWishesByWishListId(int wishListId) {
+        String sql = "DELETE FROM wish WHERE wish_list_id = ?";
+        return jdbcTemplate.update(sql, wishListId) >= 0;
     }
 
     public Integer findWishIdByName(String name) {

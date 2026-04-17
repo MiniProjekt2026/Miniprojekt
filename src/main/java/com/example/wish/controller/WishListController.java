@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 @Controller
 @RequestMapping("/users/{userId}/wishlists")
 public class WishListController {
@@ -32,13 +33,15 @@ public class WishListController {
 
     @GetMapping("")
     public String getAllWishLists(@PathVariable int userId, Model model) {
-        model.addAttribute("wishlists", wishListService.findWishListByUserId(userId));
+        model.addAttribute("wishlists", wishListService.findWishListsByUserId(userId));
         model.addAttribute("userId", userId);
         return "wishlists";
     }
 
     @GetMapping("/{wishListId}")
-    public String getWishListByWishListId(@PathVariable int wishListId, Model model) {
+    public String getWishListByWishListId(@PathVariable int userId,
+                                          @PathVariable int wishListId,
+                                          Model model) {
         WishList wishList = wishListService.findWishListById(wishListId);
 
         model.addAttribute("wishlist", wishList);
@@ -62,6 +65,18 @@ public class WishListController {
 
         if (updatedWishList == null) {
             throw new IllegalArgumentException("Wishlist kunne ikke opdateres");
+        }
+
+        return "redirect:/users/" + userId + "/wishlists";
+    }
+
+    @PostMapping("/{wishListId}/delete")
+    public String deleteWishList(@PathVariable int userId,
+                                 @PathVariable int wishListId) {
+        WishList deleted = wishListService.deleteWishList(wishListId);
+
+        if (deleted == null) {
+            throw new IllegalArgumentException("Wishlist findes ikke");
         }
 
         return "redirect:/users/" + userId + "/wishlists";

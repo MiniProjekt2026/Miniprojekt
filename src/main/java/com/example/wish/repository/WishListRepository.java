@@ -18,8 +18,8 @@ public class WishListRepository {
 
     public List<WishList> getAllWishLists() {
         String sql = """
-                SELECT wl.wish_list_id, wl.name
-                FROM wish wl
+                SELECT wl.wish_list_id, user_id, name
+                FROM wish_list 
                 """;
 
         List<WishList> wishList = jdbcTemplate.query(sql, new WishListRowMapper());
@@ -27,50 +27,36 @@ public class WishListRepository {
         return wishList;
     }
 
-    public WishList findWishListByUserId(int userId) {
+    public List<WishList> findWishListsByUserId(int userId) {
         String sql = """
-                SELECT * FROM wish_list WHERE userId = ?
+                SELECT wish_list_id, user_id, name
+                FROM wish_list
+                WHERE user_id = ?
                 """;
 
-        List<WishList> result = jdbcTemplate.query(sql,(rs, rowNum) -> {
-            WishList wishList = new WishList();
-            wishList.setWishListId(rs.getInt("wish_list_id"));
-            wishList.setUserId(rs.getInt("user_id"));
-            wishList.setName(rs.getString("name"));
-            return wishList;
-        }, userId);
-
-        return result.isEmpty() ? null : result.get(0);
+        return jdbcTemplate.query(sql, new WishListRowMapper(), userId);
     }
 
     public WishList findWishListById(int wishListId) {
-        String sql = "SELECT * FROM wish_list WHERE wish_list_id = ?";
+        String sql = """
+                SELECT wish_list_id, user_id, name
+                FROM wish_list
+                WHERE wish_list_id = ?
+                """;
 
-        List<WishList> result = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            WishList wishList = new WishList();
-            wishList.setWishListId(rs.getInt("wish_list_id"));
-            wishList.setUserId(rs.getInt("user_id"));
-            wishList.setName(rs.getString("name"));
-            return wishList;
-        }, wishListId);
+        List<WishList> result = jdbcTemplate.query(sql, new WishListRowMapper(), wishListId);
 
         return result.isEmpty() ? null : result.get(0);
     }
 
     public WishList findWishListByIdAndUserId(int userId, int wishListId) {
         String sql = """
-            SELECT * 
-            FROM wish_list 
-            WHERE user_id = ? AND wish_list_id = ?
-            """;
+                SELECT wish_list_id, user_id, name
+                FROM wish_list
+                WHERE user_id = ? AND wish_list_id = ?
+                """;
 
-        List<WishList> result = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            WishList wishList = new WishList();
-            wishList.setWishListId(rs.getInt("wish_list_id"));
-            wishList.setUserId(rs.getInt("user_id"));
-            wishList.setName(rs.getString("name"));
-            return wishList;
-        }, userId, wishListId);
+        List<WishList> result = jdbcTemplate.query(sql, new WishListRowMapper(), userId, wishListId);
 
         return result.isEmpty() ? null : result.get(0);
     }
@@ -78,9 +64,11 @@ public class WishListRepository {
     public boolean updateWishList(int wishListId, WishList wishList) {
         String sql = "UPDATE wish_list SET name = ? WHERE wish_list_id = ?";
 
-        return jdbcTemplate.update(sql,
-                wishList.getName(),
-                wishListId
-        ) > 0;
+        return jdbcTemplate.update(sql, wishList.getName(), wishListId) > 0;
+    }
+
+    public boolean deleteWishList(int wishListId) {
+        String sql = "DELETE FROM wish_list WHERE wish_list_id = ?";
+        return jdbcTemplate.update(sql, wishListId) > 0;
     }
 }

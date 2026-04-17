@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Wishlist</title>
+</head>
+<body>
+
+<header>
+    <h1>Wish App</h1>
+    <nav>
+        <a th:href="@{/}">Forside</a>
+        <a th:href="@{/users/{userId}/wishlists(userId=${wishlist.userId})}">Mine ønskelister</a>
+    </nav>
+    <hr>
+</header>
+
+<main>
+    <h2 th:text="${wishlist.name}">Wishlist</h2>
+
+    <a th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${wishlist.userId}, wishListId=${wishlist.wishListId})}">
+        Ændre liste
+    </a>
+
+    <form th:action="@{/users/{userId}/wishlists/{wishListId}/delete(userId=${wishlist.userId}, wishListId=${wishlist.wishListId})}"
+          method="post"
+          onsubmit="return confirm('Er du sikker på du vil slette listen?')">
+        <button type="submit">Slet liste</button>
+    </form>
+
+    <br>
+
+    <a th:href="@{/wishlists/{wishListId}/wishes/add(wishListId=${wishlist.wishListId})}">
+        Tilføj nyt ønske
+    </a>
+
+    <hr>
+
+    <div th:if="${wishlist.wishes != null and !wishlist.wishes.isEmpty()}">
+        <div th:each="wish : ${wishlist.wishes}">
+            <p>
+                <a th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishlist.wishListId}, wishId=${wish.id})}">
+                    <span th:text="${wish.name}">Wish navn</span>
+                </a>
+            </p>
+            <p th:text="${wish.description}">Beskrivelse</p>
+            <hr>
+        </div>
+    </div>
+
+    <div th:if="${wishlist.wishes == null or wishlist.wishes.isEmpty()}">
+        <p>Ingen ønsker i listen endnu.</p>
+    </div>
+</main>
+
+</body>
+</html>
