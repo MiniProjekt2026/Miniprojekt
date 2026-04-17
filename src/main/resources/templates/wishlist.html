@@ -2,56 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Wishlist</title>
+    <title>Rediger ønskeliste – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-<header>
-    <h1>Wish App</h1>
-    <nav>
-        <a th:href="@{/}">Forside</a>
-        <a th:href="@{/users/{userId}/wishlists(userId=${wishlist.userId})}">Mine ønskelister</a>
-    </nav>
-    <hr>
-</header>
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Øske<span>skyen</span></a>
+    <div class="navbar-links">
+        <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">Mine ønskelister</a>
+    </div>
+</nav>
 
-<main>
-    <h2 th:text="${wishlist.name}">Wishlist</h2>
-
-    <a th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${wishlist.userId}, wishListId=${wishlist.wishListId})}">
-        Ændre liste
+<div class="page-wrapper">
+    <a class="back-link" th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wishList.wishListId})}">
+        ← Tilbage til ønskelisten
     </a>
 
-    <form th:action="@{/users/{userId}/wishlists/{wishListId}/delete(userId=${wishlist.userId}, wishListId=${wishlist.wishListId})}"
-          method="post"
-          onsubmit="return confirm('Er du sikker på du vil slette listen?')">
-        <button type="submit">Slet liste</button>
-    </form>
+    <div class="page-header" style="margin-top:1rem">
+        <h1>Rediger ønskeliste</h1>
+    </div>
 
-    <br>
+    <div class="form-card">
+        <form th:action="@{/users/{userId}/wishlists/{wishListId}/update(userId=${userId}, wishListId=${wishList.wishListId})}"
+              method="post"
+              th:object="${wishList}">
 
-    <a th:href="@{/wishlists/{wishListId}/wishes/add(wishListId=${wishlist.wishListId})}">
-        Tilføj nyt ønske
-    </a>
+            <input type="hidden" th:field="*{wishListId}" />
+            <input type="hidden" th:field="*{userId}" />
 
-    <hr>
+            <div class="form-group">
+                <label for="name">Navn på ønskelisten</label>
+                <input type="text" id="name" th:field="*{name}" required autofocus />
+            </div>
 
-    <div th:if="${wishlist.wishes != null and !wishlist.wishes.isEmpty()}">
-        <div th:each="wish : ${wishlist.wishes}">
-            <p>
-                <a th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishlist.wishListId}, wishId=${wish.id})}">
-                    <span th:text="${wish.name}">Wish navn</span>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Gem ændringer</button>
+                <a class="btn btn-secondary"
+                   th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wishList.wishListId})}">
+                    Annuller
                 </a>
-            </p>
-            <p th:text="${wish.description}">Beskrivelse</p>
-            <hr>
-        </div>
+            </div>
+        </form>
     </div>
-
-    <div th:if="${wishlist.wishes == null or wishlist.wishes.isEmpty()}">
-        <p>Ingen ønsker i listen endnu.</p>
-    </div>
-</main>
+</div>
 
 </body>
 </html>

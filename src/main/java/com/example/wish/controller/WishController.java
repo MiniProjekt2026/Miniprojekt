@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("wishlists/{wishListId}/wishes")
+@RequestMapping("/wishlists/{wishListId}/wishes")
 public class WishController {
 
     private final WishService wishService;
@@ -40,14 +40,18 @@ public class WishController {
         return "redirect:/wishlists/" + wishListId;
     }
 
-//    @GetMapping("/wishlist/{userid}/{wishid}")
-//    public String getWishByWishId(@PathVariable int userid, @PathVariable int wishid, Model model) {
-//
-//        Wish wish = wishListService.findWishByUserIdAndWishId(userid, wishid);
-//
-//        model.addAttribute("wish", wish);
-//        return "wish";
-//    }
+    @GetMapping("/{wishId}")
+    public String getWishById(@PathVariable int wishId,
+                              Model model) {
+        Wish wish = wishService.findWishById(wishId);
+
+        if (wish == null) {
+            throw new IllegalArgumentException("Wish findes ikke");
+        }
+
+        model.addAttribute("wish", wish);
+        return "wish";
+    }
 
 //    @GetMapping("/wishlist/{userid}")
 //    public String getAllWishesByUsername(@PathVariable int userid, Model model) {
@@ -96,7 +100,7 @@ public class WishController {
             throw new IllegalArgumentException("Kunne ikke opdatere wish");
         }
 
-        return "redirect:/wishlists/" + updated.getWishListId() + "/wishes";
+        return "redirect:/wishlists/" + updated.getWishListId();
     }
     @PostMapping("/delete/{wishId}")
     public String deleteWish(@PathVariable int wishListId,
@@ -107,6 +111,6 @@ public class WishController {
             throw new IllegalArgumentException("Wish findes ikke");
         }
 
-        return "redirect:/wishlists/" + deleted.getWishListId() + "/wishes";
+        return "redirect:/wishlists/" + deleted.getWishListId();
     }
 }

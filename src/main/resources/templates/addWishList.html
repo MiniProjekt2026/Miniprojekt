@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Ny ønskeliste – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${user_id})}">Øske<span>skyen</span></a>
+    <div class="navbar-links">
+        <a th:href="@{/users/{userId}/wishlists(userId=${user_id})}">← Tilbage</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <a class="back-link" th:href="@{/users/{userId}/wishlists(userId=${user_id})}">← Tilbage til ønskelister</a>
+
+    <div class="page-header" style="margin-top:1rem">
+        <h1>Ny ønskeliste</h1>
+        <p>Giv din liste et navn</p>
+    </div>
+
+    <div class="form-card">
+        <form th:action="@{/users/{userId}/wishlists/save(userId=${user_id})}"
+              th:object="${wish_list}"
+              method="post">
+
+            <input type="hidden" th:field="*{userId}" />
+
+            <div class="form-group">
+                <label for="name">Navn på ønskelisten</label>
+                <input type="text" id="name" th:field="*{name}"
+                       placeholder="F.eks. Julegaver 2024" required autofocus />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Opret ønskeliste</button>
+                <a class="btn btn-secondary" th:href="@{/users/{userId}/wishlists(userId=${user_id})}">Annuller</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

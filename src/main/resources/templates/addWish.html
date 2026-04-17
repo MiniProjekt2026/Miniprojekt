@@ -2,87 +2,98 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Tilføj ønske - Wish List</title>
+    <title>Tilføj ønske – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-<nav>
-    <a th:href="@{/wishlists/{id}(id=${wishListId})}">Ønsker</a>
-    <a th:href="@{/wishlists/{id}/wishes/add(id=${wishListId})}">+ Tilføj</a>
-    <a th:href="@{/wishlists/{id}(id=${wishListId})}">← Tilbage</a>
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/wishlists/{id}(id=${wishListId})}">Øske<span>skyen</span></a>
+    <div class="navbar-links">
+        <a th:href="@{/wishlists/{id}(id=${wishListId})}">← Tilbage til listen</a>
+    </div>
 </nav>
 
+<div class="page-wrapper">
+    <a class="back-link" th:href="@{/wishlists/{id}(id=${wishListId})}">← Tilbage til ønskelisten</a>
 
-<main>
-    <div>
-        <a href="/wishes">← Tilbage</a>
+    <div class="page-header" style="margin-top:1rem">
+        <h1>Nyt ønske</h1>
+        <p>Tilføj et ønske til din liste</p>
+    </div>
 
-        <h1>Tilføj nyt ønske</h1>
-
-
+    <div class="form-card">
         <form th:action="@{/wishlists/{id}/wishes/save(id=${wishListId})}"
               th:object="${wish}"
               method="post">
 
-            <div>
-                <label for="name">Navn</label>
-                <input type="text" id="name" th:field="*{name}" placeholder="Indtast ønskets titel" required/>
+            <input type="hidden" th:field="*{wishListId}" />
+
+            <div class="form-group">
+                <label for="name">Navn *</label>
+                <input type="text" id="name" th:field="*{name}"
+                       placeholder="Hvad ønsker du dig?" required autofocus />
             </div>
 
-            <div>
+            <div class="form-group">
                 <label for="description">Beskrivelse</label>
-                <textarea id="description" th:field="*{description}" placeholder="Indtast en beskrivelse"></textarea>
+                <textarea id="description" th:field="*{description}"
+                          placeholder="Tilføj en beskrivelse eller detaljer..."></textarea>
             </div>
 
-            <div>
-                <label for="price">Pris</label>
-                <textarea id="price" th:field="*{price}" placeholder="0"></textarea>
-            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                <div class="form-group">
+                    <label for="price">Pris (kr.)</label>
+                    <input type="number" id="price" th:field="*{price}" placeholder="0" min="0" step="0.01" />
+                </div>
 
-            <div class="stepper">
-                <label>Antal</label>
-                <button type="button"  onclick="decrease()">−</button>
-                <label for="quantity"></label><input type="number" id="quantity" th:field="*{quantity}" min="0">
-                <button type="button" onclick="increase()">+</button>
-            </div>
-
-            <script>
-                function increase() {
-                    const input = document.getElementById("quantity");
-                    input.value = parseInt(input.value) + 1;
-                }
-
-                function decrease() {
-                    const input = document.getElementById("quantity");
-                    if (input.value > input.min) {
-                        input.value = parseInt(input.value) - 1;
-                    }
-                }
-            </script>
-
-            <div>
-                <label>Tags</label>
-                <div>
-                    <label th:each="tag : ${tags}">
-                        <input type="checkbox" th:field="*{tags}" th:value="${tag}"/>
-                        <span th:text="${tag}"></span>
-                    </label>
+                <div class="form-group">
+                    <label>Antal</label>
+                    <div class="stepper-group">
+                        <button type="button" class="stepper-btn" onclick="decrease()">−</button>
+                        <input type="number" id="quantity" th:field="*{quantity}" min="1" value="1" />
+                        <button type="button" class="stepper-btn" onclick="increase()">+</button>
+                    </div>
                 </div>
             </div>
 
-            <div>
+            <div class="form-group">
+                <label>Tags</label>
+                <div class="tag-checkboxes">
+                    <th:block th:each="tag : ${tags}">
+                        <input type="checkbox" class="tag-checkbox"
+                               th:id="'tag-' + ${tag}"
+                               th:field="*{tags}"
+                               th:value="${tag}" />
+                        <label class="tag-label" th:for="'tag-' + ${tag}" th:text="${tag}"></label>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label for="productLink">Produktlink</label>
-                <textarea id="productLink" th:field="*{productLink}" placeholder="Indsæt et produktlink"></textarea>
+                <input type="text" id="productLink" th:field="*{productLink}"
+                       placeholder="https://..." />
             </div>
 
-            <div>
-                <button type="submit" class="btn">Tilføj ønske</button>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Tilføj ønske</button>
+                <a class="btn btn-secondary" th:href="@{/wishlists/{id}(id=${wishListId})}">Annuller</a>
             </div>
-
         </form>
     </div>
+</div>
 
-</main>
+<script>
+    function increase() {
+        const input = document.getElementById("quantity");
+        input.value = parseInt(input.value || 1) + 1;
+    }
+    function decrease() {
+        const input = document.getElementById("quantity");
+        if (parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
+    }
+</script>
 
 </body>
 </html>
