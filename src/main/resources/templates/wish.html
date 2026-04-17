@@ -26,7 +26,7 @@
                th:href="@{/wishlists/{wishListId}/wishes/edit/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.id})}">
                 Rediger
             </a>
-            <form th:action="@{/wishlists/{wishListId}/wishes/delete/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.id})}"
+            <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/delete(wishListId=${wish.wishListId}, wishId=${wish.id})}"
                   method="post" style="display:inline"
                   onsubmit="return confirm('Er du sikker på du vil slette dette ønske?')">
                 <button type="submit" class="btn btn-danger btn-sm">Slet</button>
