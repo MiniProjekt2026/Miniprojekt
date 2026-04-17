@@ -65,4 +65,5 @@ public class WishListService{
     public void addWishList(WishList wishList) {
         wishListRepository.addWishList(wishList);
     }
+    //:)
 }
