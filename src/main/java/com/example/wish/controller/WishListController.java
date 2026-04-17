@@ -23,15 +23,15 @@ public class WishListController {
         wishList.setUserId(userId);
 
 
-        model.addAttribute("wish_list", wishList);
-        model.addAttribute("user_id", userId);
+        model.addAttribute("wishList", wishList);
+        model.addAttribute("userId", userId);
 
         return "addWishList";
     }
 
     @PostMapping("/save")
     public String saveWishList(@PathVariable int userId,
-                               @ModelAttribute("wish_list") WishList wishList){
+                               @ModelAttribute("wishList") WishList wishList){
 
         wishList.setUserId(userId); // enforce relationship
         wishListService.addWishList(wishList);
@@ -54,9 +54,9 @@ public class WishListController {
         return "editWishList";
     }
 
-    @GetMapping("")
+    @GetMapping()
     public String getAllWishLists(@PathVariable int userId, Model model) {
-        model.addAttribute("wishlists", wishListService.findWishListsByUserId(userId));
+        model.addAttribute("wishLists", wishListService.findWishListsByUserId(userId));
         model.addAttribute("userId", userId);
         return "wishlists";
     }
@@ -67,22 +67,27 @@ public class WishListController {
                                           Model model) {
         WishList wishList = wishListService.findWishListById(wishListId);
 
-        model.addAttribute("wishlist", wishList);
-        return "wishlist";
-    }
-
-    @PostMapping("/{wishListId}/update")
-    public String updateWishList(@ModelAttribute WishList wishList) {
-        WishList existing = wishListService.findWishListById(wishList.getWishListId());
-
-        if (existing == null) {
+        if (wishList == null) {
             throw new IllegalArgumentException("Wishlist findes ikke");
         }
 
-        int userId = existing.getUserId();
+        model.addAttribute("wishList", wishList);
+        return "wishList";
+    }
+
+    @PostMapping("/{wishListId}/update")
+    public String updateWishList(@PathVariable int userId,
+                                 @PathVariable int wishListId,
+                                 @ModelAttribute WishList wishList) {
+
+        WishList existing = wishListService.findWishListById(wishListId);
+
+        if (existing == null || existing.getUserId() != userId) {
+            throw new IllegalArgumentException("Wishlist findes ikke");
+        }
 
         WishList updatedWishList = wishListService.updateWishList(
-                wishList.getWishListId(),
+                wishListId,
                 wishList
         );
 
@@ -96,11 +101,14 @@ public class WishListController {
     @PostMapping("/{wishListId}/delete")
     public String deleteWishList(@PathVariable int userId,
                                  @PathVariable int wishListId) {
-        WishList deleted = wishListService.deleteWishList(wishListId);
 
-        if (deleted == null) {
-            throw new IllegalArgumentException("Wishlist findes ikke");
+        WishList existing = wishListService.findWishListById(wishListId);
+
+        if (existing == null || existing.getUserId() != userId) {
+            throw new IllegalArgumentException("Ugyldig wishlist");
         }
+
+        wishListService.deleteWishList(wishListId);
 
         return "redirect:/users/" + userId + "/wishlists";
     }

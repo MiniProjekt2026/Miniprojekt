@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Tilføj ønske – Ønskeskyen</title>
+    <title>Tilføj ønske – Ønskelisten</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" th:href="@{/wishlists/{id}(id=${wishListId})}">Øske<span>skyen</span></a>
+    <a class="navbar-brand" th:href="@{/wishlists/{id}(id=${wishListId})}">Ønske<span>listen</span></a>
     <div class="navbar-links">
         <a th:href="@{/wishlists/{id}(id=${wishListId})}">← Tilbage til listen</a>
     </div>
@@ -23,11 +23,9 @@
     </div>
 
     <div class="form-card">
-        <form th:action="@{/wishlists/{id}/wishes/save(id=${wishListId})}"
+        <form th:action="@{/wishlists/{wishListId}/wishes/save(wishListId=${wishListId})}"
               th:object="${wish}"
               method="post">
-
-            <input type="hidden" th:field="*{wishListId}" />
 
             <div class="form-group">
                 <label for="name">Navn *</label>
@@ -84,6 +82,8 @@
     </div>
 </div>
 
+</div> <!-- page-wrapper -->
+
 <script>
     function increase() {
         const input = document.getElementById("quantity");
@@ -91,7 +91,9 @@
     }
     function decrease() {
         const input = document.getElementById("quantity");
-        if (parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
+        if (parseInt(input.value || 1) > 1) {
+            input.value = parseInt(input.value || 1) - 1;
+        }
     }
 </script>
 
