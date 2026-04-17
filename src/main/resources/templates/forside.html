@@ -2,23 +2,108 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Forside</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ønskeskyen – Forside</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-<header>
-    <h1>Wish App</h1>
-    <nav>
-        <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">Mine ønskelister</a>
-    </nav>
-    <hr>
-</header>
+<nav class="navbar landing-navbar">
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Ønske<span>skyen</span></a>
+    <div class="navbar-links">
+        <a class="btn btn-secondary btn-sm" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Mine ønskelister</a>
+    </div>
+</nav>
 
-<main>
-    <h2>Velkommen</h2>
-    <p>Tryk her for at se dine ønskelister.</p>
+<main class="landing-hero">
+    <div class="landing-hero-inner">
+        <div class="landing-copy">
+            <span class="landing-badge">✨ Din personlige ønskeside</span>
+            <h1>Hold styr på dine ønsker på en enkel og flot måde</h1>
+            <p>
+                Saml gaveidéer, opret ønskelister og del dine ønsker i et roligt,
+                overskueligt univers. Alt samlet ét sted.
+            </p>
 
-    <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">Gå til ønskelister</a>
+            <div class="landing-actions">
+                <a class="btn btn-primary" th:href="@{/users/{userId}/wishlists(userId=${userId})}">
+                    Gå til mine ønskelister
+                </a>
+                <a class="btn btn-secondary" th:href="@{/user/createUser}">
+                    Opret bruger
+                </a>
+            </div>
+
+            <div class="landing-stats">
+                <div class="landing-stat-card">
+                    <strong>Opret</strong>
+                    <span>flere ønskelister til jul, fødselsdag og ønsker året rundt</span>
+                </div>
+                <div class="landing-stat-card">
+                    <strong>Organisér</strong>
+                    <span>med tags, links, beskrivelser og priser</span>
+                </div>
+                <div class="landing-stat-card">
+                    <strong>Bevar overblikket</strong>
+                    <span>med et moderne og simpelt design</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="landing-showcase" aria-label="Eksempel på funktioner">
+            <div class="showcase-card showcase-card-main">
+                <div class="showcase-card-header">
+                    <span class="showcase-dot"></span>
+                    <span class="showcase-dot"></span>
+                    <span class="showcase-dot"></span>
+                </div>
+
+                <div class="showcase-content">
+                    <div class="showcase-title-row">
+                        <div>
+                            <p class="eyebrow">Aktiv ønskeliste</p>
+                            <h2>Fødselsdag 🎁</h2>
+                        </div>
+                        <span class="price-badge">6 ønsker</span>
+                    </div>
+
+                    <div class="showcase-wish-list">
+                        <div class="showcase-wish-item">
+                            <div>
+                                <h3>Bluetooth højtaler</h3>
+                                <p>God lyd · vandtæt · sort</p>
+                            </div>
+                            <span class="price-badge">799 kr.</span>
+                        </div>
+
+                        <div class="showcase-wish-item">
+                            <div>
+                                <h3>Striktrøje</h3>
+                                <p>Varm, enkel og neutral farve</p>
+                            </div>
+                            <span class="price-badge">499 kr.</span>
+                        </div>
+
+                        <div class="showcase-tags">
+                            <span class="tag">Tech</span>
+                            <span class="tag">Mode</span>
+                            <span class="tag">Favorit</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="showcase-floating-card floating-top">
+                <strong>Hurtigt overblik</strong>
+                <p>Se dine vigtigste ønsker med det samme.</p>
+            </div>
+
+            <div class="showcase-floating-card floating-bottom">
+                <strong>Let at bruge</strong>
+                <p>Bygget til et rent og enkelt flow.</p>
+            </div>
+        </section>
+    </div>
 </main>
 
 </body>

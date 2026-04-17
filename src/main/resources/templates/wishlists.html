@@ -27,8 +27,8 @@
         </div>
     </div>
 
-    <div th:if="${wishlists != null and !wishlists.isEmpty()}" class="wishlist-grid">
-        <div th:each="wl : ${wishlists}" class="wishlist-card">
+    <div th:if="${wishLists != null and !wishLists.isEmpty()}" class="wishlist-grid">
+        <div th:each="wl : ${wishLists}" class="wishlist-card">
             <div class="wishlist-card-info">
                 <h3 th:text="${wl.name}">Ønskeliste navn</h3>
                 <p th:if="${wl.wishes != null}" th:text="${#lists.size(wl.wishes)} + ' ønsker'">0 ønsker</p>
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div th:if="${wishlists == null or wishlists.isEmpty()}" class="empty-state card">
+    <div th:if="${wishLists == null or wishLists.isEmpty()}" class="empty-state card">
         <span class="icon">☁️</span>
         <h3>Ingen ønskelister endnu</h3>
         <p>Opret din første ønskeliste og begynd at tilføje ønsker</p>

@@ -72,7 +72,8 @@ public class WishListController {
         }
 
         model.addAttribute("wishList", wishList);
-        return "wishList";
+        model.addAttribute("userId", userId);
+        return "wishlist";
     }
 
     @PostMapping("/{wishListId}/update")

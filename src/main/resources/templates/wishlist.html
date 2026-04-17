@@ -2,48 +2,60 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Rediger ønskeliste – Ønskeskyen</title>
+    <title th:text="${wishList.name} + ' – Ønskeskyen'">Ønskeliste – Ønskeskyen</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Øske<span>skyen</span></a>
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">Ønske<span>skyen</span></a>
     <div class="navbar-links">
-        <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">Mine ønskelister</a>
+        <a th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">← Tilbage til lister</a>
     </div>
 </nav>
 
 <div class="page-wrapper">
-    <a class="back-link" th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wishList.wishListId})}">
-        ← Tilbage til ønskelisten
-    </a>
+    <a class="back-link" th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">← Tilbage til ønskelister</a>
 
-    <div class="page-header" style="margin-top:1rem">
-        <h1>Rediger ønskeliste</h1>
+    <div class="top-row" style="margin-top:1rem">
+        <div class="page-header" style="margin-bottom:0">
+            <h1 th:text="${wishList.name}">Ønskeliste</h1>
+            <p>Dine ønsker på denne liste</p>
+        </div>
+        <div class="section-actions">
+            <a class="btn btn-secondary"
+               th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${wishList.userId}, wishListId=${wishList.wishListId})}">
+                Rediger liste
+            </a>
+            <a class="btn btn-primary"
+               th:href="@{/wishlists/{wishListId}/wishes/add(wishListId=${wishList.wishListId})}">
+                + Nyt ønske
+            </a>
+        </div>
     </div>
 
-    <div class="form-card">
-        <form th:action="@{/users/{userId}/wishlists/{wishListId}/update(userId=${userId}, wishListId=${wishList.wishListId})}"
-              method="post"
-              th:object="${wishList}">
-
-            <input type="hidden" th:field="*{wishListId}" />
-            <input type="hidden" th:field="*{userId}" />
-
-            <div class="form-group">
-                <label for="name">Navn på ønskelisten</label>
-                <input type="text" id="name" th:field="*{name}" required autofocus />
+    <div th:if="${wishList.wishes != null and !wishList.wishes.isEmpty()}" class="wish-list">
+        <a th:each="wish : ${wishList.wishes}"
+           class="wish-item"
+           th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishList.wishListId}, wishId=${wish.wishId})}">
+            <div class="wish-item-info">
+                <h4 th:text="${wish.name}">Ønske</h4>
+                <p th:text="${wish.description != null and !#strings.isEmpty(wish.description) ? wish.description : 'Ingen beskrivelse'}">Beskrivelse</p>
             </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Gem ændringer</button>
-                <a class="btn btn-secondary"
-                   th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wishList.wishListId})}">
-                    Annuller
-                </a>
+            <div class="wish-item-meta">
+                <span class="price-badge" th:text="${wish.price != null ? wish.price + ' kr.' : 'Pris ukendt'}">Pris</span>
             </div>
-        </form>
+        </a>
+    </div>
+
+    <div th:if="${wishList.wishes == null or wishList.wishes.isEmpty()}" class="empty-state card">
+        <span class="icon">🎁</span>
+        <h3>Ingen ønsker endnu</h3>
+        <p>Tilføj det første ønske til listen</p>
+        <a class="btn btn-primary"
+           th:href="@{/wishlists/{wishListId}/wishes/add(wishListId=${wishList.wishListId})}">
+            + Tilføj ønske
+        </a>
     </div>
 </div>
 
