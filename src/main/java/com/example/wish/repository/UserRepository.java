@@ -30,6 +30,20 @@ public class UserRepository {
         return count != null && count > 0;
     }
 
+    public User findByUsername(String username) {
+        String sql = "SELECT * FROM user WHERE username = ?";
+
+        return jdbcTemplate.query(sql, rs -> {
+            if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id")); // tjek kolonnenavn!
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                return user;
+            }
+            return null;
+        }, username);
+    }
 
     //public void editPassword()
 }
