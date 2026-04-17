@@ -2,6 +2,7 @@ package com.example.wish.service;
 
 import com.example.wish.model.WishList;
 import com.example.wish.repository.WishListRepository;
+import com.example.wish.repository.WishRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class WishListService{
         return wishListRepository.findWishListById(wishListId);
     }
 
-    public WishList findWishListByUserId(int userId) {
-        return wishListRepository.findWishListByUserId(userId);
+    public List<WishList> findWishListsByUserId(int userId) {
+        return wishListRepository.findWishListsByUserId(userId);
     }
 
     public WishList findWishListByIdAndUserId(int userId, int wishListId) {
@@ -46,6 +47,21 @@ public class WishListService{
         return existing;
     }
 
+    public WishList deleteWishList(int wishListId) {
+        WishList existing = wishListRepository.findWishListById(wishListId);
+
+        if (existing == null) {
+            return null;
+        }
+
+        boolean deleted = wishListRepository.deleteWishList(wishListId);
+
+        if (!deleted) {
+            return null;
+        }
+
+        return existing;
+    }
     public void addWishList(WishList wishList) {
         wishListRepository.addWishList(wishList);
     }

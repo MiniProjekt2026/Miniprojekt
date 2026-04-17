@@ -1,57 +1,58 @@
 DROP
-DATABASE if exists wishes;
-create
-database if not exists wishes;
-use
+DATABASE IF EXISTS wishes;
+CREATE
+DATABASE IF NOT EXISTS wishes;
+USE
 wishes;
-select database();
 
 SET
 FOREIGN_KEY_CHECKS = 0;
-drop table if exists wish_tag;
-drop table if exists tag;
-drop table if exists wish;
-drop table if exists user;
-drop table if exists wish_list;
+DROP TABLE IF EXISTS wish_tag;
+DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS wish;
+DROP TABLE IF EXISTS wish_list;
+DROP TABLE IF EXISTS user;
 SET
 FOREIGN_KEY_CHECKS = 1;
 
-create table wish
+CREATE TABLE user
 (
-    wish_id      int AUTO_INCREMENT primary key,
-    name         VARCHAR(255) not null,
-    description  VARCHAR(255),
-    price double,
-    quantity     int,
-    product_link VARCHAR(255),
-    foreign key (wish_list_id) REFERENCES user (wish_list_id) ON DELETE CASCADE
-);
-
-create table tag
-(
-    tag_id   int AUTO_INCREMENT primary key,
-    tag_name VARCHAR(255)
-);
-
-create table wish_tag
-(
-    wish_id int AUTO_INCREMENT primary key,
-    tag_id  int AUTO_INCREMENT primary key,
-    foreign key (wish_id) REFERENCES wish_list (wish_id) ON DELETE CASCADE,
-    foreign key (tag_id) REFERENCES tag (tag_id) ON DELETE CASCADE
-);
-
-create table user
-(
-    user_id  int AUTO_INCREMENT primary key,
+    user_id  INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(15) NOT NULL,
     password VARCHAR(25) NOT NULL
 );
 
-create table wish_list
+CREATE TABLE wish_list
 (
-    wish_list_id      int AUTO_INCREMENT primary key,
-    name         VARCHAR(255) not null,
-    foreign key (user_id) REFERENCES user (user_id) ON DELETE CASCADE
+    wish_list_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id      INT          NOT NULL,
+    name         VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
+CREATE TABLE wish
+(
+    wish_id      INT AUTO_INCREMENT PRIMARY KEY,
+    name         VARCHAR(255) NOT NULL,
+    description  VARCHAR(255),
+    price DOUBLE,
+    quantity     INT,
+    product_link VARCHAR(255),
+    wish_list_id INT          NOT NULL,
+    FOREIGN KEY (wish_list_id) REFERENCES wish_list (wish_list_id) ON DELETE CASCADE
+);
+
+CREATE TABLE tag
+(
+    tag_id   INT AUTO_INCREMENT PRIMARY KEY,
+    tag_name VARCHAR(255)
+);
+
+CREATE TABLE wish_tag
+(
+    wish_id INT,
+    tag_id  INT,
+    PRIMARY KEY (wish_id, tag_id),
+    FOREIGN KEY (wish_id) REFERENCES wish (wish_id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tag (tag_id) ON DELETE CASCADE
+);

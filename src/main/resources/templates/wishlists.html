@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Wishlists</title>
+</head>
+<body>
+
+<header>
+    <h1>Wish App</h1>
+    <nav>
+        <a th:href="@{/}">Forside</a>
+    </nav>
+    <hr>
+</header>
+
+<main>
+    <h2>Mine ønskelister</h2>
+
+    <div th:if="${wishlists != null and !wishlists.isEmpty()}">
+        <div th:each="wl : ${wishlists}">
+            <p>
+                <strong th:text="${wl.name}">Wishlist navn</strong>
+            </p>
+
+            <a th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wl.wishListId})}">
+                Åbn ønskeliste
+            </a>
+
+            <a th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${userId}, wishListId=${wl.wishListId})}">
+                Rediger liste
+            </a>
+
+            <form th:action="@{/users/{userId}/wishlists/{wishListId}/delete(userId=${userId}, wishListId=${wl.wishListId})}" method="post">
+                <button type="submit">Slet liste</button>
+            </form>
+
+            <hr>
+        </div>
+    </div>
+
+    <div th:if="${wishlists == null or wishlists.isEmpty()}">
+        <p>Ingen ønskelister fundet.</p>
+    </div>
+</main>
+
+</body>
+</html>

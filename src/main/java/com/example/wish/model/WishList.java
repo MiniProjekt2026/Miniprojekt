@@ -1,9 +1,13 @@
 package com.example.wish.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WishList {
     private int wishListId;
     private int userId;
     private String name;
+
 
     public WishList() {
     }

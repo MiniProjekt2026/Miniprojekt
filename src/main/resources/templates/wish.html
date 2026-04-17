@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Wish</title>
+</head>
+<body>
+
+<header>
+    <h1>Wish App</h1>
+    <nav>
+        <a th:href="@{/}">Forside</a>
+        <a th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${wish.userId}, wishListId=${wish.wishListId})}">Tilbage til wishlist</a>
+    </nav>
+    <hr>
+</header>
+
+<main>
+    <h2 th:text="${wish.name}">Wish navn</h2>
+
+    <p><strong>Beskrivelse:</strong> <span th:text="${wish.description}"></span></p>
+    <p><strong>Pris:</strong> <span th:text="${wish.price}"></span></p>
+    <p><strong>Antal:</strong> <span th:text="${wish.quantity}"></span></p>
+    <p><strong>Produktlink:</strong> <span th:text="${wish.productLink}"></span></p>
+
+    <p><strong>Tags:</strong></p>
+    <ul>
+        <li th:each="tag : ${wish.tags}" th:text="${tag}"></li>
+    </ul>
+
+    <a th:href="@{/wishlists/{wishListId}/wishes/edit/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.id})}">
+        Edit wish
+    </a>
+
+    <form th:action="@{/wishlists/{wishListId}/wishes/delete/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.id})}" method="post">
+        <button type="submit">Slet wish</button>
+    </form>
+</main>
+
+</body>
+</html>
