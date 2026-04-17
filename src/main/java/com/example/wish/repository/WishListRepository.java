@@ -2,6 +2,7 @@ package com.example.wish.repository;
 
 import com.example.wish.model.Wish;
 import com.example.wish.model.WishList;
+import com.example.wish.service.WishListService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +12,11 @@ import java.util.List;
 public class WishListRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final WishListService wishListService;
 
-    public WishListRepository(JdbcTemplate jdbcTemplate) {
+    public WishListRepository(JdbcTemplate jdbcTemplate, WishListService wishListService) {
         this.jdbcTemplate = jdbcTemplate;
+        this.wishListService = wishListService;
     }
 
     public List<WishList> getAllWishLists() {
@@ -70,5 +73,31 @@ public class WishListRepository {
     public boolean deleteWishList(int wishListId) {
         String sql = "DELETE FROM wish_list WHERE wish_list_id = ?";
         return jdbcTemplate.update(sql, wishListId) > 0;
+    }
+
+    public void addWishList(WishList wishList) {
+        String sqlWishList = "INSERT INTO wish_list(name, user_id) VALUES (?,?,?)";
+        jdbcTemplate.update(sqlWishList,
+                wishList.getName(),
+                wishList.getUserId()
+        );
+
+        Integer wishId = findWishListIdByName(wishList.getName());
+
+        if (wishId == null) {
+            throw new IllegalArgumentException("Ønsket blev oprettet, men wish_id kunne ikke findes");
+        }
+    }
+
+    public Integer findWishListIdByName(String name) {
+        String sql = "SELECT wish_list_id FROM wish_list WHERE name = ? ORDER BY wish_list_id DESC LIMIT 1";
+
+        List<Integer> result = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> rs.getInt("wish_list_id"),
+                name
+        );
+
+        return result.isEmpty() ? null : result.get(0);
     }
 }

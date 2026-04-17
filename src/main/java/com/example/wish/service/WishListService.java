@@ -62,4 +62,7 @@ public class WishListService{
 
         return existing;
     }
+    public void addWishList(WishList wishList) {
+        wishListRepository.addWishList(wishList);
+    }
 }
