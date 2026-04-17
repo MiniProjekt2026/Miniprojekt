@@ -1,5 +1,6 @@
 package com.example.wish.controller;
 
+import com.example.wish.model.Wish;
 import com.example.wish.model.WishList;
 import com.example.wish.service.WishListService;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,28 @@ public class WishListController {
 
     public WishListController(WishListService wishListService) {
         this.wishListService = wishListService;
+    }
+
+    @GetMapping("/add")
+    public String addWishList(@PathVariable int userId, Model model) {
+        WishList wishList = new WishList();
+        wishList.setUserId(userId);
+
+
+        model.addAttribute("wish_list", wishList);
+        model.addAttribute("user_id", userId);
+
+        return "addWishList";
+    }
+
+    @PostMapping("/save")
+    public String saveWishList(@PathVariable int userId,
+                             @ModelAttribute("wishList") WishList wishList) {
+
+        wishList.setUserId(userId); // enforce relationship
+        wishListService.addWishList(wishList);
+
+        return "redirect:/users/" + userId + "/wishlists";
     }
 
 
