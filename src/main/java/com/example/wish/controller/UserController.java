@@ -43,7 +43,7 @@ public class UserController {
         User user = userService.findByUsername(username);
 
         if (user != null && userService.login(username, password)) {
-            return "redirect:/users/" + user.getUserId() + "/wishlists";
+           return "redirect:/home/" + user.getUserId();
         } else {
             model.addAttribute("error", "Forkert brugernavn eller adgangskode");
             return "login";

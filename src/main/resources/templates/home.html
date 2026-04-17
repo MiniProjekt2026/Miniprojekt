@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Min forside – Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="navbar-brand">Ønske<span>skyen</span></a>
+</nav>
+
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <h1>Velkommen 👋</h1>
+        <p>Hvad vil du gøre i dag?</p>
+    </div>
+
+    <div class="wishlist-grid">
+
+        <a class="wishlist-card"
+           th:href="@{/users/{userId}/wishlists(userId=${userId})}">
+            <div class="wishlist-card-info">
+                <h3>Se ønskelister</h3>
+                <p>Se og administrer dine lister</p>
+            </div>
+        </a>
+
+        <a class="wishlist-card"
+           th:href="@{/users/{userId}/wishlists/add(userId=${userId})}">
+            <div class="wishlist-card-info">
+                <h3>Opret ønskeliste</h3>
+                <p>Lav en ny liste</p>
+            </div>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
