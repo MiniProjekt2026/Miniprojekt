@@ -12,11 +12,9 @@ import java.util.List;
 public class WishListRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final WishListService wishListService;
 
-    public WishListRepository(JdbcTemplate jdbcTemplate, WishListService wishListService) {
+    public WishListRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.wishListService = wishListService;
     }
 
     public List<WishList> getAllWishLists() {
