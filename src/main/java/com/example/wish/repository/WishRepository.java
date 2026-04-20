@@ -178,12 +178,18 @@ public class WishRepository {
 
     public List<Wish> findWishesByWishListId(int wishListId){
         String sql = """
-                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
-                FROM wish
-                WHERE wish_list_id = ?
-                """;
+            SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+            FROM wish
+            WHERE wish_list_id = ?
+            """;
 
-        return jdbcTemplate.query(sql, new WishRowMapper(), wishListId);
+        List<Wish> wishes = jdbcTemplate.query(sql, new WishRowMapper(), wishListId);
+
+        for (Wish w : wishes) {
+            w.setTags(getTagsByWishId(w.getId()));
+        }
+
+        return wishes;
     }
 
 }
