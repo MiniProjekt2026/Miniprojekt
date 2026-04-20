@@ -36,7 +36,9 @@ public class WishListService{
             return null;
         }
 
-        existing.setName(newValues.getName());
+        if (newValues.getName() != null) {
+            existing.setName(newValues.getName());
+        }
 
         boolean updated = wishListRepository.updateWishList(wishListId, existing);
 
