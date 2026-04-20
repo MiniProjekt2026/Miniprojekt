@@ -23,11 +23,11 @@
     </div>
 
     <div class="form-card">
-        <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/update(wishListId=${wishListId}, wishId=${wish.wishId})}"
+        <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/update(wishListId=${wishListId}, wishId=${wish.id})}"
               method="post"
               th:object="${wish}">
 
-            <input type="hidden" th:field="*{wishId}" />
+            <input type="hidden" th:field="*{id}" />
             <input type="hidden" th:field="*{wishListId}" />
 
             <div class="form-group">
