@@ -35,21 +35,26 @@
         </div>
     </div>
 
-    <div th:if="${wishList.wishes != null and !wishList.wishes.isEmpty()}" class="wish-list">
-        <a th:each="wish : ${wishList.wishes}"
+    <div th:if="${wishes != null and !wishes.isEmpty()}" class="wish-list">
+        <a th:each="wish : ${wishes}"
            class="wish-item"
-           th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishList.wishListId}, wishId=${wish.wishId})}">
+           th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishList.wishListId}, wishId=${wish.id})}">
             <div class="wish-item-info">
                 <h4 th:text="${wish.name}">Ønske</h4>
-                <p th:text="${wish.description != null and !#strings.isEmpty(wish.description) ? wish.description : 'Ingen beskrivelse'}">Beskrivelse</p>
+                <p th:text="${wish.description != null and !#strings.isEmpty(wish.description) ? wish.description : 'Ingen beskrivelse'}">
+                    Beskrivelse
+                </p>
             </div>
             <div class="wish-item-meta">
-                <span class="price-badge" th:text="${wish.price != null ? wish.price + ' kr.' : 'Pris ukendt'}">Pris</span>
+                <span class="price-badge"
+                      th:text="${wish.price != null ? wish.price + ' kr.' : 'Pris ukendt'}">
+                    Pris
+                </span>
             </div>
         </a>
     </div>
 
-    <div th:if="${wishList.wishes == null or wishList.wishes.isEmpty()}" class="empty-state card">
+    <div th:if="${wishes == null or wishes.isEmpty()}" class="empty-state card">
         <span class="icon">🎁</span>
         <h3>Ingen ønsker endnu</h3>
         <p>Tilføj det første ønske til listen</p>

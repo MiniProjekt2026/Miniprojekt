@@ -1,27 +1,28 @@
 package com.example.wish.controller;
 
-import com.example.wish.model.Wish;
 import com.example.wish.model.WishList;
 import com.example.wish.service.WishListService;
+import com.example.wish.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
 @RequestMapping("/users/{userId}/wishlists")
 public class WishListController {
-    private final WishListService wishListService;
 
-    public WishListController(WishListService wishListService) {
+    private final WishListService wishListService;
+    private final WishService wishService;
+
+    public WishListController(WishListService wishListService, WishService wishService) {
         this.wishListService = wishListService;
+        this.wishService = wishService;
     }
 
     @GetMapping("/add")
     public String addWishList(@PathVariable int userId, Model model) {
         WishList wishList = new WishList();
         wishList.setUserId(userId);
-
 
         model.addAttribute("wishList", wishList);
         model.addAttribute("userId", userId);
@@ -31,17 +32,18 @@ public class WishListController {
 
     @PostMapping("/save")
     public String saveWishList(@PathVariable int userId,
-                               @ModelAttribute("wishList") WishList wishList){
+                               @ModelAttribute("wishList") WishList wishList) {
 
-        wishList.setUserId(userId); // enforce relationship
+        wishList.setUserId(userId);
         wishListService.addWishList(wishList);
 
         return "redirect:/users/" + userId + "/wishlists";
     }
 
-
     @GetMapping("/{wishListId}/edit")
-    public String editWishList(@PathVariable int userId, @PathVariable int wishListId, Model model) {
+    public String editWishList(@PathVariable int userId,
+                               @PathVariable int wishListId,
+                               Model model) {
         WishList wishList = wishListService.findWishListByIdAndUserId(userId, wishListId);
 
         if (wishList == null) {
@@ -65,14 +67,16 @@ public class WishListController {
     public String getWishListByWishListId(@PathVariable int userId,
                                           @PathVariable int wishListId,
                                           Model model) {
-        WishList wishList = wishListService.findWishListById(wishListId);
+        WishList wishList = wishListService.findWishListByIdAndUserId(userId, wishListId);
 
         if (wishList == null) {
             throw new IllegalArgumentException("Wishlist findes ikke");
         }
 
         model.addAttribute("wishList", wishList);
+        model.addAttribute("wishes", wishService.getWishById(wishListId));
         model.addAttribute("userId", userId);
+
         return "wishlist";
     }
 
@@ -81,16 +85,13 @@ public class WishListController {
                                  @PathVariable int wishListId,
                                  @ModelAttribute WishList wishList) {
 
-        WishList existing = wishListService.findWishListById(wishListId);
+        WishList existing = wishListService.findWishListByIdAndUserId(userId, wishListId);
 
-        if (existing == null || existing.getUserId() != userId) {
+        if (existing == null) {
             throw new IllegalArgumentException("Wishlist findes ikke");
         }
 
-        WishList updatedWishList = wishListService.updateWishList(
-                wishListId,
-                wishList
-        );
+        WishList updatedWishList = wishListService.updateWishList(wishListId, wishList);
 
         if (updatedWishList == null) {
             throw new IllegalArgumentException("Wishlist kunne ikke opdateres");
@@ -103,9 +104,9 @@ public class WishListController {
     public String deleteWishList(@PathVariable int userId,
                                  @PathVariable int wishListId) {
 
-        WishList existing = wishListService.findWishListById(wishListId);
+        WishList existing = wishListService.findWishListByIdAndUserId(userId, wishListId);
 
-        if (existing == null || existing.getUserId() != userId) {
+        if (existing == null) {
             throw new IllegalArgumentException("Ugyldig wishlist");
         }
 

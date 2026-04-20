@@ -32,7 +32,7 @@
         <div th:each="wl : ${wishLists}" class="wishlist-card">
             <div class="wishlist-card-info">
                 <h3 th:text="${wl.name}">Ønskeliste navn</h3>
-                <p th:if="${wl.wishes != null}" th:text="${#lists.size(wl.wishes)} + ' ønsker'">0 ønsker</p>
+                <p>Ønskeliste</p>
             </div>
             <div class="wishlist-card-actions">
                 <a class="btn btn-secondary btn-sm"
