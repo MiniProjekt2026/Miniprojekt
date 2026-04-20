@@ -74,7 +74,7 @@ public class WishListRepository {
     }
 
     public void addWishList(WishList wishList) {
-        String sqlWishList = "INSERT INTO wish_list(name, user_id) VALUES (?,?,?)";
+        String sqlWishList = "INSERT INTO wish_list(name, user_id) VALUES (?,?)";
         jdbcTemplate.update(sqlWishList,
                 wishList.getName(),
                 wishList.getUserId()
