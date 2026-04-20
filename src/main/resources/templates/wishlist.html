@@ -9,14 +9,20 @@
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">Ønske<span>listen</span></a>
+    <!--
+        FIX: was using ${wishList.userId} in all href expressions.
+        The controller already adds userId to the model as a plain attribute — use that instead.
+        ${wishList.userId} is fragile: if wishList is ever null, Thymeleaf throws before any guard,
+        causing a Whitelabel error. ${userId} is always safe since it comes straight from @PathVariable.
+    -->
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Ønske<span>listen</span></a>
     <div class="navbar-links">
-        <a th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">← Mine lister</a>
+        <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">← Mine lister</a>
     </div>
 </nav>
 
 <div class="page-wrapper">
-    <a class="back-link" th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">← Tilbage til ønskelister</a>
+    <a class="back-link" th:href="@{/users/{userId}/wishlists(userId=${userId})}">← Tilbage til ønskelister</a>
 
     <div class="top-row" style="margin-top:1rem">
         <div class="page-header" style="margin-bottom:0">
@@ -25,7 +31,7 @@
         </div>
         <div class="section-actions">
             <a class="btn btn-secondary"
-               th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${wishList.userId}, wishListId=${wishList.wishListId})}">
+               th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${userId}, wishListId=${wishList.wishListId})}">
                 Rediger liste
             </a>
             <a class="btn btn-primary"
@@ -35,8 +41,14 @@
         </div>
     </div>
 
-    <div th:if="${wishList.wishes != null and !wishList.wishes.isEmpty()}" class="wish-list">
-        <a th:each="wish : ${wishList.wishes}"
+    <!--
+        FIX: was iterating ${wishList.wishes} for the list but checking ${wishes} (the separate
+        model attribute) for the empty state — inconsistent. The controller adds BOTH to the model.
+        Use ${wishes} (the dedicated model attribute) for everything so it's consistent and
+        the empty-state guard actually matches what the list renders.
+    -->
+    <div th:if="${wishes != null and !wishes.isEmpty()}" class="wish-list">
+        <a th:each="wish : ${wishes}"
            class="wish-item"
            th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishList.wishListId}, wishId=${wish.wishId})}">
             <div class="wish-item-info">
@@ -54,6 +66,7 @@
         </a>
     </div>
 
+    <!-- FIX: was checking ${wishes == null or wishes.isEmpty()} while rendering from ${wishList.wishes} above -->
     <div th:if="${wishes == null or wishes.isEmpty()}" class="empty-state card">
         <span class="icon">🎁</span>
         <h3>Ingen ønsker endnu</h3>
