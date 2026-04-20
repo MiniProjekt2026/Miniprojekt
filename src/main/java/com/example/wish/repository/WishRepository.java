@@ -164,6 +164,11 @@ public class WishRepository {
         return jdbcTemplate.update(sql, wishListId) >= 0;
     }
 
+    public boolean deleteWishById(int wishId) {
+        String sql = "DELETE FROM wish WHERE wish_id = ?";
+        return jdbcTemplate.update(sql, wishId) > 0;
+    }
+
     public Integer findWishIdByName(String name) {
         String sql = "SELECT wish_id FROM wish WHERE name = ? ORDER BY wish_id DESC LIMIT 1";
 

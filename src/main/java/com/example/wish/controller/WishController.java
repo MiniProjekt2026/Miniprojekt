@@ -138,10 +138,15 @@ public class WishController {
             throw new IllegalArgumentException("Ugyldig wish");
         }
 
-        wishService.deleteWish(wishId);
+        Wish deleted = wishService.deleteWish(wishId);
+
+        if (deleted == null) {
+            throw new IllegalArgumentException("Kunne ikke slette wish");
+        }
 
         WishList wishList = wishListService.findWishListById(wishListId);
         int userId = (wishList != null) ? wishList.getUserId() : 0;
+
         return "redirect:/users/" + userId + "/wishlists/" + wishListId;
     }
 }

@@ -58,7 +58,7 @@ public class WishService {
             return null;
         }
 
-        boolean deleted = wishRepository.deleteWishesByWishListId(wishId);
+        boolean deleted = wishRepository.deleteWishById(wishId);
 
         return deleted ? existing : null;
     }
