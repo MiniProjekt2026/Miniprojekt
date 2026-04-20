@@ -176,4 +176,14 @@ public class WishRepository {
         return result.isEmpty() ? null : result.get(0);
     }
 
+    public List<Wish> findWishesByWishListId(int wishListId){
+        String sql = """
+                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                FROM wish
+                WHERE wish_list_id = ?
+                """;
+
+        return jdbcTemplate.query(sql, new WishRowMapper(), wishListId);
+    }
+
 }

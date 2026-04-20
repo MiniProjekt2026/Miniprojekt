@@ -67,15 +67,8 @@ public class WishService {
 
     }
 
-    public List<Wish> getWishById(int wishId) {
-        List<Wish> result = new ArrayList<>();
-
-        for (Wish w : wishRepository.getAllWishes()) {
-            if (w.getWishListId() == wishId) {
-                result.add(w);
-            }
-        }
-        return result;
+    public List<Wish> getWishesByWishListId(int wishListId) {
+        return wishRepository.findWishesByWishListId(wishListId);
     }
 
 //    public Wish findWishByUserIdAndWishId(int userId, int wishId) {

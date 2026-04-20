@@ -74,7 +74,7 @@ public class WishListController {
         }
 
         model.addAttribute("wishList", wishList);
-        model.addAttribute("wishes", wishService.getWishById(wishListId));
+        model.addAttribute("wishes", wishService.getWishesByWishListId(wishListId));
         model.addAttribute("userId", userId);
 
         return "wishlist";
