@@ -69,12 +69,12 @@ public class WishRepository {
 
     public List<String> getTagsByWishName(String name) {
         String sql = """
-                SELECT t.tag_name
-                FROM tag t
-                JOIN wish_tag tat ON t.tag_id = tat.tag_id
-                JOIN wish ta ON tat.wish_id = ta.wish_id
-                WHERE ta.name = ?
-                """;
+        SELECT t.tag_name
+        FROM tag t
+        JOIN wish_tags tat ON t.tag_id = tat.tag_id
+        JOIN wish ta ON tat.wish_id = ta.wish_id
+        WHERE ta.name = ?
+        """;
 
         return jdbcTemplate.query(
                 sql,
@@ -147,16 +147,14 @@ public class WishRepository {
 
     private List<String> getTagsByWishId(int id) {
         String sql = """
-                  SELECT t.tag_name
-                            FROM tag t
-                            JOIN wish_tag wlt ON t.tag_id = wlt.tag_id
-                            WHERE wlt.wish_id = ?
-                """;
+            SELECT t.tag_name
+            FROM tag t
+            JOIN wish_tags wlt ON t.tag_id = wlt.tag_id
+            WHERE wlt.wish_id = ?
+            """;
 
         return jdbcTemplate.query(
                 sql, (rs, rowNum) -> rs.getString("tag_name"), id);
-
-
     }
 
     public boolean deleteWishesByWishListId(int wishListId) {
