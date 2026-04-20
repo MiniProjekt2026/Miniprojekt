@@ -33,7 +33,7 @@ public class WishController {
         model.addAttribute("wish", wish);
         model.addAttribute("tags", wishService.getTags());
         model.addAttribute("wishListId", wishListId);
-        model.addAttribute("userId", resolveUserId(wishListId)); // FIX: was missing
+        model.addAttribute("userId", resolveUserId(wishListId));
 
         return "addWish";
     }
@@ -60,7 +60,7 @@ public class WishController {
 
         model.addAttribute("wish", wish);
         model.addAttribute("wishListId", wishListId);
-        model.addAttribute("userId", resolveUserId(wishListId)); // FIX: was missing
+        model.addAttribute("userId", resolveUserId(wishListId));
 
         return "wish";
     }
@@ -86,7 +86,8 @@ public class WishController {
     @PostMapping("/{wishId}/update")
     public String updateWish(@PathVariable int wishListId,
                              @PathVariable int wishId,
-                             @ModelAttribute Wish wish) {
+                             // FIX: missing explicit name caused binding to fail silently
+                             @ModelAttribute("wish") Wish wish) {
 
         Wish updated = wishService.updateWish(wishId, wish);
 

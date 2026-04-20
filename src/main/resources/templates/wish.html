@@ -28,11 +28,11 @@
                 WishController uses @PathVariable int wishId, so use wish.wishId consistently.
             -->
             <a class="btn btn-secondary btn-sm"
-               th:href="@{/wishlists/{wishListId}/wishes/edit/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.id})}">
+               th:href="@{/wishlists/{wishListId}/wishes/edit/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.wishId})}">
                 Rediger
             </a>
 
-            <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/delete(wishListId=${wish.wishListId}, wishId=${wish.id})}"
+            <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/delete(wishListId=${wish.wishListId}, wishId=${wish.wishId})}"
                   method="post" style="display:inline"
                   onsubmit="return confirm('Er du sikker på du vil slette dette ønske?')">
                 <button type="submit" class="btn btn-danger btn-sm">Slet</button>

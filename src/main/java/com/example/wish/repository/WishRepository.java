@@ -4,7 +4,6 @@ import com.example.wish.model.Wish;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -28,26 +27,13 @@ public class WishRepository {
         return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("tag_name"), wishId);
     }
 
-//    private Wish mapWish(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
-//        int wishId = rs.getInt("wish_id");
-//        return new Wish(
-//                wishId,
-//                rs.getString("name"),
-//                rs.getString("description"),
-//                rs.getDouble("price"),
-//                rs.getInt("quantity"),
-//                loadTagsForWish(wishId),
-//                rs.getString("product_link"),
-//                rs.getInt("wish_list_id")
-//        );
-//    }
-
     public List<Wish> getAllWishes() {
         String sql = """
                 SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
                 FROM wish
                 """;
-        return jdbcTemplate.query(sql, new WishRowMapper());
+        // FIX: pass 'this' so WishRowMapper can call loadTagsForWish
+        return jdbcTemplate.query(sql, new WishRowMapper(this));
     }
 
     public List<Wish> findWishesByWishListId(int wishListId) {
@@ -56,7 +42,8 @@ public class WishRepository {
                 FROM wish
                 WHERE wish_list_id = ?
                 """;
-        return jdbcTemplate.query(sql, new WishRowMapper(), wishListId);
+        // FIX: pass 'this'
+        return jdbcTemplate.query(sql, new WishRowMapper(this), wishListId);
     }
 
     public Wish findWishById(int wishId) {
@@ -65,7 +52,8 @@ public class WishRepository {
                 FROM wish
                 WHERE wish_id = ?
                 """;
-        List<Wish> result = jdbcTemplate.query(sql, new WishRowMapper(), wishId);
+        // FIX: pass 'this'
+        List<Wish> result = jdbcTemplate.query(sql, new WishRowMapper(this), wishId);
         return result.isEmpty() ? null : result.get(0);
     }
 
@@ -130,15 +118,12 @@ public class WishRepository {
         return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("tag_name"));
     }
 
-
     private void saveTagsForWish(int wishId, List<String> tagNames) {
         for (String tagName : tagNames) {
-
             jdbcTemplate.update(
                     "INSERT IGNORE INTO tag(tag_name) VALUES (?)",
                     tagName
             );
-
             Integer tagId = jdbcTemplate.queryForObject(
                     "SELECT tag_id FROM tag WHERE tag_name = ?",
                     Integer.class,

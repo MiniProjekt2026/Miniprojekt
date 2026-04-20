@@ -3,16 +3,20 @@ package com.example.wish.repository;
 import com.example.wish.model.Wish;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class WishRowMapper implements RowMapper<Wish> {
 
-    private WishRepository wishRepository;
+    private final WishRepository wishRepository;
+
+    // FIX: wishRepository was never injected — was always null → NullPointerException
+    public WishRowMapper(WishRepository wishRepository) {
+        this.wishRepository = wishRepository;
+    }
 
     @Override
-    public Wish mapRow(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
+    public Wish mapRow(ResultSet rs, int rowNum) throws SQLException {
         int wishId = rs.getInt("wish_id");
         return new Wish(
                 wishId,
