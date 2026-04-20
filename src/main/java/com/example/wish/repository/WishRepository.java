@@ -59,7 +59,7 @@ public class WishRepository {
         }
 
     }
-
+//
     public List<String> getTags() {
         String getTags = "SELECT tag_name FROM tag";
 
