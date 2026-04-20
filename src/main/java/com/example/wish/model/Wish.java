@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Wish {
-    private int id;
+    private int wishId;
     private String name;
     private String description;
     private double price;
@@ -16,18 +16,7 @@ public class Wish {
     public Wish() {
     }
 
-    public Wish(String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId){
-        this.name=name;
-        this.description=description;
-        this.price=price;
-        this.quantity=quantity;
-        this.tags=(tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
-        this.productLink=productLink;
-        this.wishListId=wishListId;
-    }
-
-    public Wish(int id, String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId){
-        this.id = id;
+    public Wish(String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -37,20 +26,31 @@ public class Wish {
         this.wishListId = wishListId;
     }
 
+    public Wish(int wishId, String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId) {
+        this.wishId = wishId;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.tags = (tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
+        this.productLink = productLink;
+        this.wishListId = wishListId;
+    }
+
+    public int getWishId() {
+        return wishId;
+    }
+
+    public void setWishId(int wishId) {
+        this.wishId = wishId;
+    }
+
     public int getWishListId() {
         return wishListId;
     }
 
     public void setWishListId(int wishListId) {
         this.wishListId = wishListId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -90,7 +90,7 @@ public class Wish {
     }
 
     public void setTags(List<String> tags) {
-        this.tags = tags;
+        this.tags = (tags != null) ? tags : new ArrayList<>();
     }
 
     public String getProductLink() {
@@ -101,4 +101,3 @@ public class Wish {
         this.productLink = productLink;
     }
 }
-//:)

@@ -35,10 +35,10 @@
         </div>
     </div>
 
-    <div th:if="${wishes != null and !wishes.isEmpty()}" class="wish-list">
-        <a th:each="wish : ${wishes}"
+    <div th:if="${wishList.wishes != null and !wishList.wishes.isEmpty()}" class="wish-list">
+        <a th:each="wish : ${wishList.wishes}"
            class="wish-item"
-           th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishList.wishListId}, wishId=${wish.id})}">
+           th:href="@{/wishlists/{wishListId}/wishes/{wishId}(wishListId=${wishList.wishListId}, wishId=${wish.wishId})}">
             <div class="wish-item-info">
                 <h4 th:text="${wish.name}">Ønske</h4>
                 <p th:text="${wish.description != null and !#strings.isEmpty(wish.description) ? wish.description : 'Ingen beskrivelse'}">

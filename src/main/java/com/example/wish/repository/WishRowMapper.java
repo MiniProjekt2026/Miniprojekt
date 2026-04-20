@@ -9,15 +9,18 @@ import java.sql.ResultSet;
 
 public class WishRowMapper implements RowMapper<Wish> {
 
+    private WishRepository wishRepository;
+
     @Override
-    public Wish mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Wish mapRow(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
+        int wishId = rs.getInt("wish_id");
         return new Wish(
-                rs.getInt("wish_id"),
+                wishId,
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getDouble("price"),
                 rs.getInt("quantity"),
-                new ArrayList<>(),
+                wishRepository.loadTagsForWish(wishId),
                 rs.getString("product_link"),
                 rs.getInt("wish_list_id")
         );

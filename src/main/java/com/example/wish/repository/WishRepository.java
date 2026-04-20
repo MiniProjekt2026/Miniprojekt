@@ -4,6 +4,7 @@ import com.example.wish.model.Wish;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -15,24 +16,65 @@ public class WishRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // ── helpers ──────────────────────────────────────────────────────────────
+
+    public List<String> loadTagsForWish(int wishId) {
+        String sql = """
+                SELECT t.tag_name
+                FROM tag t
+                JOIN wish_tag wt ON t.tag_id = wt.tag_id
+                WHERE wt.wish_id = ?
+                """;
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("tag_name"), wishId);
+    }
+
+//    private Wish mapWish(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
+//        int wishId = rs.getInt("wish_id");
+//        return new Wish(
+//                wishId,
+//                rs.getString("name"),
+//                rs.getString("description"),
+//                rs.getDouble("price"),
+//                rs.getInt("quantity"),
+//                loadTagsForWish(wishId),
+//                rs.getString("product_link"),
+//                rs.getInt("wish_list_id")
+//        );
+//    }
+
     public List<Wish> getAllWishes() {
         String sql = """
-            SELECT w.wish_id, w.wish_list_id, w.name, w.description, w.price, w.quantity, w.product_link
-            FROM wish w
-            """;
+                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                FROM wish
+                """;
+        return jdbcTemplate.query(sql, new WishRowMapper());
+    }
 
-        List<Wish> wishes = jdbcTemplate.query(sql, new WishRowMapper());
+    public List<Wish> findWishesByWishListId(int wishListId) {
+        String sql = """
+                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                FROM wish
+                WHERE wish_list_id = ?
+                """;
+        return jdbcTemplate.query(sql, new WishRowMapper(), wishListId);
+    }
 
-        for (Wish w : wishes) {
-            w.setTags(getTagsByWishId(w.getId()));
-        }
-
-        return wishes;
+    public Wish findWishById(int wishId) {
+        String sql = """
+                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                FROM wish
+                WHERE wish_id = ?
+                """;
+        List<Wish> result = jdbcTemplate.query(sql, new WishRowMapper(), wishId);
+        return result.isEmpty() ? null : result.get(0);
     }
 
     public void addWish(Wish wish) {
-        String sqlWish = "INSERT INTO wish(name, description, price, quantity, product_link, wish_list_id) VALUES (?,?,?,?,?,?)";
-        jdbcTemplate.update(sqlWish,
+        String sql = """
+                INSERT INTO wish(name, description, price, quantity, product_link, wish_list_id)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """;
+        jdbcTemplate.update(sql,
                 wish.getName(),
                 wish.getDescription(),
                 wish.getPrice(),
@@ -41,67 +83,25 @@ public class WishRepository {
                 wish.getWishListId()
         );
 
-        Integer wishId = findWishIdByName(wish.getName());
-
-        if (wishId == null) {
-            throw new IllegalArgumentException("Ønsket blev oprettet, men wish_id kunne ikke findes");
-        }
-
-        for (String tag : wish.getTags()) {
-            Integer tagId = findTagIdByDescription(tag);
-
-            if (tagId != null) {
-                jdbcTemplate.update("INSERT INTO wish_tags (tag_id, wish_id) VALUES (?, ?)",
-                        tagId,
-                        wishId
-                );
+        if (wish.getTags() != null && !wish.getTags().isEmpty()) {
+            Integer newWishId = jdbcTemplate.queryForObject(
+                    "SELECT wish_id FROM wish WHERE wish_list_id = ? ORDER BY wish_id DESC LIMIT 1",
+                    Integer.class,
+                    wish.getWishListId()
+            );
+            if (newWishId != null) {
+                saveTagsForWish(newWishId, wish.getTags());
             }
         }
-
-    }
-//
-    public List<String> getTags() {
-        String getTags = "SELECT tag_name FROM tag";
-
-        return jdbcTemplate.query(getTags,
-                (rs, rowNum) -> rs.getString("tag_name"));
-    }
-
-    public List<String> getTagsByWishName(String name) {
-        String sql = """
-        SELECT t.tag_name
-        FROM tag t
-        JOIN wish_tags tat ON t.tag_id = tat.tag_id
-        JOIN wish ta ON tat.wish_id = ta.wish_id
-        WHERE ta.name = ?
-        """;
-
-        return jdbcTemplate.query(
-                sql,
-                (rs, rowNum) -> rs.getString("tag_name"),
-                name
-        );
-    }
-
-    public Integer findTagIdByDescription(String TagName) {
-        List<Integer> result = jdbcTemplate.query(
-                "SELECT tag_id FROM tag WHERE tag_description = ?",
-                (rs, rowNum) -> rs.getInt("tag_id"),
-                TagName
-        );
-
-        return result.isEmpty() ? null : result.get(0);
-
     }
 
     public boolean updateWish(int wishId, Wish wish) {
         String sql = """
-        UPDATE wish
-        SET name = ?, description = ?, price = ?, quantity = ?, product_link = ?
-        WHERE wish_id = ?
-    """;
-
-        return jdbcTemplate.update(sql,
+                UPDATE wish
+                SET name = ?, description = ?, price = ?, quantity = ?, product_link = ?
+                WHERE wish_id = ?
+                """;
+        boolean updated = jdbcTemplate.update(sql,
                 wish.getName(),
                 wish.getDescription(),
                 wish.getPrice(),
@@ -109,57 +109,15 @@ public class WishRepository {
                 wish.getProductLink(),
                 wishId
         ) > 0;
-    }
 
-    public Wish findWishById(int wishId) {
-        String sql = "SELECT * FROM wish WHERE wish_id = ?";
-
-        List<Wish> result = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Wish wish = new Wish();
-            wish.setId(rs.getInt("wish_id"));
-            wish.setWishListId(rs.getInt("wish_list_id"));
-            wish.setName(rs.getString("name"));
-            wish.setDescription(rs.getString("description"));
-            wish.setPrice(rs.getDouble("price"));
-            wish.setQuantity(rs.getInt("quantity"));
-            wish.setProductLink(rs.getString("product_link"));
-            return wish;
-        }, wishId);
-
-        return result.isEmpty() ? null : result.get(0);
-    }
-
-    private List<Wish> getWishesByUserId(int userId) {
-        String sql = """
-                SELECT wish_id, name, description, price, quantity, product_link, user_id
-                FROM wish
-                WHERE user_id = ?
-                """;
-
-        List<Wish> wish = jdbcTemplate.query(sql, new WishRowMapper(), userId);
-
-        for (Wish w : wish) {
-            w.setTags(getTagsByWishId(w.getId()));
+        if (updated) {
+            jdbcTemplate.update("DELETE FROM wish_tag WHERE wish_id = ?", wishId);
+            if (wish.getTags() != null && !wish.getTags().isEmpty()) {
+                saveTagsForWish(wishId, wish.getTags());
+            }
         }
-        return wish;
-    }
 
-
-    private List<String> getTagsByWishId(int id) {
-        String sql = """
-            SELECT t.tag_name
-            FROM tag t
-            JOIN wish_tags wlt ON t.tag_id = wlt.tag_id
-            WHERE wlt.wish_id = ?
-            """;
-
-        return jdbcTemplate.query(
-                sql, (rs, rowNum) -> rs.getString("tag_name"), id);
-    }
-
-    public boolean deleteWishesByWishListId(int wishListId) {
-        String sql = "DELETE FROM wish WHERE wish_list_id = ?";
-        return jdbcTemplate.update(sql, wishListId) >= 0;
+        return updated;
     }
 
     public boolean deleteWishById(int wishId) {
@@ -167,32 +125,31 @@ public class WishRepository {
         return jdbcTemplate.update(sql, wishId) > 0;
     }
 
-    public Integer findWishIdByName(String name) {
-        String sql = "SELECT wish_id FROM wish WHERE name = ? ORDER BY wish_id DESC LIMIT 1";
-
-        List<Integer> result = jdbcTemplate.query(
-                sql,
-                (rs, rowNum) -> rs.getInt("wish_id"),
-                name
-        );
-
-        return result.isEmpty() ? null : result.get(0);
+    public List<String> getTags() {
+        String sql = "SELECT tag_name FROM tag ORDER BY tag_name";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("tag_name"));
     }
 
-    public List<Wish> findWishesByWishListId(int wishListId){
-        String sql = """
-            SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
-            FROM wish
-            WHERE wish_list_id = ?
-            """;
 
-        List<Wish> wishes = jdbcTemplate.query(sql, new WishRowMapper(), wishListId);
+    private void saveTagsForWish(int wishId, List<String> tagNames) {
+        for (String tagName : tagNames) {
 
-        for (Wish w : wishes) {
-            w.setTags(getTagsByWishId(w.getId()));
+            jdbcTemplate.update(
+                    "INSERT IGNORE INTO tag(tag_name) VALUES (?)",
+                    tagName
+            );
+
+            Integer tagId = jdbcTemplate.queryForObject(
+                    "SELECT tag_id FROM tag WHERE tag_name = ?",
+                    Integer.class,
+                    tagName
+            );
+            if (tagId != null) {
+                jdbcTemplate.update(
+                        "INSERT IGNORE INTO wish_tag(wish_id, tag_id) VALUES (?, ?)",
+                        wishId, tagId
+                );
+            }
         }
-
-        return wishes;
     }
-
 }

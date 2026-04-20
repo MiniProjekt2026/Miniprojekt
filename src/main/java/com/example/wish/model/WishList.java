@@ -7,7 +7,7 @@ public class WishList {
     private int wishListId;
     private int userId;
     private String name;
-
+    private List<Wish> wishes = new ArrayList<>();
 
     public WishList() {
     }
@@ -16,6 +16,7 @@ public class WishList {
         this.wishListId = wishListId;
         this.userId = userId;
         this.name = name;
+        this.wishes = new ArrayList<>();
     }
 
     public int getWishListId() {
@@ -40,5 +41,13 @@ public class WishList {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Wish> getWishes() {
+        return wishes;
+    }
+
+    public void setWishes(List<Wish> wishes) {
+        this.wishes = (wishes != null) ? wishes : new ArrayList<>();
     }
 }
