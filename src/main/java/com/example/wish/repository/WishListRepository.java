@@ -79,12 +79,6 @@ public class WishListRepository {
                 wishList.getName(),
                 wishList.getUserId()
         );
-
-        Integer wishId = findWishListIdByName(wishList.getName());
-
-        if (wishId == null) {
-            throw new IllegalArgumentException("Ønsket blev oprettet, men wish_id kunne ikke findes");
-        }
     }
 
     public Integer findWishListIdByName(String name) {
