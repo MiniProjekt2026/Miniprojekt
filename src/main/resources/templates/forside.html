@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Ønskeskyen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ønskelisten</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
@@ -10,18 +11,13 @@
 <div class="auth-wrapper">
     <div class="auth-card">
         <div class="auth-logo">
-            <h1>Ønskeskyen</h1>
+            <h1>Ønske<span>listen</span></h1>
             <p>Hold styr på dine ønsker</p>
         </div>
 
-        <div class="form-actions" style="flex-direction: column;">
-            <a class="btn btn-primary btn-block" th:href="@{/user/login}">
-                Log ind
-            </a>
-
-            <a class="btn btn-secondary btn-block" th:href="@{/user/createUser}">
-                Opret bruger
-            </a>
+        <div class="form-actions" style="flex-direction:column; margin-top:0; padding-top:0; border-top:none;">
+            <a class="btn btn-primary btn-block" th:href="@{/user/login}">Log ind</a>
+            <a class="btn btn-secondary btn-block" th:href="@{/user/createUser}">Opret bruger</a>
         </div>
     </div>
 </div>

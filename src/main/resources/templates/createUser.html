@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Opret bruger – Ønskeskyen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret bruger – Ønskelisten</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
@@ -10,7 +11,7 @@
 <div class="auth-wrapper">
     <div class="auth-card">
         <div class="auth-logo">
-            <h1>Ønskeskyen</h1>
+            <h1>Ønske<span>listen</span></h1>
             <p>Opret en gratis konto</p>
         </div>
 
@@ -29,7 +30,9 @@
                        placeholder="Vælg en adgangskode" required />
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Opret bruger</button>
+            <div class="form-actions" style="margin-top:1.25rem; padding-top:0; border-top:none;">
+                <button type="submit" class="btn btn-primary btn-block">Opret bruger</button>
+            </div>
         </form>
 
         <div class="auth-footer">

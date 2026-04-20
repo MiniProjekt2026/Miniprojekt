@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Log ind – Ønskeskyen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log ind – Ønskelisten</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
@@ -10,7 +11,7 @@
 <div class="auth-wrapper">
     <div class="auth-card">
         <div class="auth-logo">
-            <h1>Ønskeskyen</h1>
+            <h1>Ønske<span>listen</span></h1>
             <p>Log ind for at se dine ønskelister</p>
         </div>
 
@@ -19,15 +20,19 @@
         <form th:action="@{/user/login}" method="post">
             <div class="form-group">
                 <label for="username">Brugernavn</label>
-                <input type="text" id="username" name="username" placeholder="Dit brugernavn" required autofocus />
+                <input type="text" id="username" name="username"
+                       placeholder="Dit brugernavn" required autofocus />
             </div>
 
             <div class="form-group">
                 <label for="password">Adgangskode</label>
-                <input type="password" id="password" name="password" placeholder="Din adgangskode" required />
+                <input type="password" id="password" name="password"
+                       placeholder="Din adgangskode" required />
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Log ind</button>
+            <div class="form-actions" style="margin-top:1.25rem; padding-top:0; border-top:none;">
+                <button type="submit" class="btn btn-primary btn-block">Log ind</button>
+            </div>
         </form>
 
         <div class="auth-footer">

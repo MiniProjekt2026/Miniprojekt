@@ -5,7 +5,6 @@
     <title>Sletter...</title>
 </head>
 <body>
-<!-- Auto-submits a DELETE action via a hidden form -->
 <form th:action="@{/wishes/delete/{name}(name=${name})}" method="post" id="autoDeleteForm"></form>
 <script>document.getElementById('autoDeleteForm').submit();</script>
 </body>

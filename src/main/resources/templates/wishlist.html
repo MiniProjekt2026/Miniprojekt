@@ -2,15 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${wishList.name} + ' – Ønskeskyen'">Ønskeliste – Ønskeskyen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${wishList.name} + ' – Ønskelisten'">Ønskeliste – Ønskelisten</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">Ønske<span>skyen</span></a>
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">Ønske<span>listen</span></a>
     <div class="navbar-links">
-        <a th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">← Tilbage til lister</a>
+        <a th:href="@{/users/{userId}/wishlists(userId=${wishList.userId})}">← Mine lister</a>
     </div>
 </nav>
 

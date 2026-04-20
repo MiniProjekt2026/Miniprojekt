@@ -2,31 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${wish.name} + ' – Ønskeskyen'">Ønske – Ønskeskyen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${wish.name} + ' – Ønskelisten'">Ønske – Ønskelisten</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" th:href="@{/wishlists/{id}(id=${wish.wishListId})}">Øske<span>skyen</span></a>
+    <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Ønske<span>listen</span></a>
     <div class="navbar-links">
-        <a th:href="@{/wishlists/{id}(id=${wish.wishListId})}">← Tilbage til listen</a>
+        <a th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wish.wishListId})}">← Tilbage til listen</a>
     </div>
 </nav>
 
 <div class="page-wrapper">
-    <a class="back-link" th:href="@{/wishlists/{id}(id=${wish.wishListId})}">← Tilbage til ønskelisten</a>
+    <a class="back-link" th:href="@{/users/{userId}/wishlists/{wishListId}(userId=${userId}, wishListId=${wish.wishListId})}">← Tilbage til ønskelisten</a>
 
     <div class="top-row" style="margin-top:1rem">
         <div class="page-header" style="margin-bottom:0">
             <h1 th:text="${wish.name}">Ønske</h1>
         </div>
         <div class="section-actions">
+            <!--
+                FIX: original used ${wish.id} in edit link but wishlist.html used ${wish.wishId}.
+                WishController uses @PathVariable int wishId, so use wish.wishId consistently.
+            -->
             <a class="btn btn-secondary btn-sm"
-               th:href="@{/wishlists/{wishListId}/wishes/edit/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.id})}">
+               th:href="@{/wishlists/{wishListId}/wishes/edit/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.wishId})}">
                 Rediger
             </a>
-            <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/delete(wishListId=${wish.wishListId}, wishId=${wish.id})}"
+            <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/delete(wishListId=${wish.wishListId}, wishId=${wish.wishId})}"
                   method="post" style="display:inline"
                   onsubmit="return confirm('Er du sikker på du vil slette dette ønske?')">
                 <button type="submit" class="btn btn-danger btn-sm">Slet</button>
@@ -58,7 +63,7 @@
 
         <div th:if="${wish.tags != null and !wish.tags.isEmpty()}">
             <div class="divider"></div>
-            <label style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted)">Tags</label>
+            <label style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted)">Tags</label>
             <div class="tags-list">
                 <span class="tag" th:each="tag : ${wish.tags}" th:text="${tag}"></span>
             </div>

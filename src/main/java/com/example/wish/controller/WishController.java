@@ -1,6 +1,8 @@
 package com.example.wish.controller;
 
 import com.example.wish.model.Wish;
+import com.example.wish.model.WishList;
+import com.example.wish.service.WishListService;
 import com.example.wish.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,19 +15,25 @@ import java.util.List;
 public class WishController {
 
     private final WishService wishService;
+    private final WishListService wishListService;
 
-    public WishController(WishService wishService) {
+    public WishController(WishService wishService, WishListService wishListService) {
         this.wishService = wishService;
+        this.wishListService = wishListService;
     }
 
     @GetMapping("/add")
     public String addWishes(@PathVariable int wishListId, Model model) {
         Wish wish = new Wish();
-        wish.setWishListId(wishListId); // important
+        wish.setWishListId(wishListId);
+
+        WishList wishList = wishListService.findWishListById(wishListId);
+        int userId = (wishList != null) ? wishList.getUserId() : 0;
 
         model.addAttribute("wish", wish);
         model.addAttribute("tags", wishService.getTags());
         model.addAttribute("wishListId", wishListId);
+        model.addAttribute("userId", userId); // FIX: was missing
 
         return "addWish";
     }
@@ -34,10 +42,12 @@ public class WishController {
     public String saveWishes(@PathVariable int wishListId,
                              @ModelAttribute("wish") Wish wish) {
 
-        wish.setWishListId(wishListId); // enforce relationship
+        wish.setWishListId(wishListId);
         wishService.addWishes(wish);
 
-        return "redirect:/wishlists/" + wishListId;
+        WishList wishList = wishListService.findWishListById(wishListId);
+        int userId = (wishList != null) ? wishList.getUserId() : 0;
+        return "redirect:/users/" + userId + "/wishlists/" + wishListId;
     }
 
     @GetMapping("/{wishId}")
@@ -50,24 +60,14 @@ public class WishController {
             throw new IllegalArgumentException("Wish findes ikke");
         }
 
+        WishList wishList = wishListService.findWishListById(wishListId);
+        int userId = (wishList != null) ? wishList.getUserId() : 0;
+
         model.addAttribute("wish", wish);
         model.addAttribute("wishListId", wishListId);
+        model.addAttribute("userId", userId);
         return "wish";
     }
-
-//    @GetMapping("/wishlist/{userid}")
-//    public String getAllWishesByUsername(@PathVariable int userid, Model model) {
-//
-//        List<Wish> wishes = wishService.findWishByWishListId(userid);
-//
-//        if (wishes.isEmpty()) {
-//            throw new IllegalArgumentException("Ingen ønskeliste fundet for det userId");
-//        }
-//
-//        model.addAttribute("wishes", wishes);
-//        return "wishes";
-//    }
-
 
     @GetMapping("/{wishId}/tags")
     public String showTags(@PathVariable int wishListId,
@@ -80,9 +80,13 @@ public class WishController {
             throw new IllegalArgumentException("Wish findes ikke");
         }
 
+        WishList wishList = wishListService.findWishListById(wishListId);
+        int userId = (wishList != null) ? wishList.getUserId() : 0;
+
         model.addAttribute("wish", wish);
         model.addAttribute("tags", wishService.getTags());
         model.addAttribute("wishListId", wishListId);
+        model.addAttribute("userId", userId);
 
         return "tags";
     }
@@ -97,9 +101,13 @@ public class WishController {
             throw new IllegalArgumentException("Ønske findes ikke");
         }
 
+        WishList wishList = wishListService.findWishListById(wishListId);
+        int userId = (wishList != null) ? wishList.getUserId() : 0;
+
         model.addAttribute("wish", wish);
         model.addAttribute("allTags", wishService.getTags());
         model.addAttribute("wishListId", wishListId);
+        model.addAttribute("userId", userId);
 
         return "editWish";
     }
@@ -115,7 +123,9 @@ public class WishController {
             throw new IllegalArgumentException("Kunne ikke opdatere wish");
         }
 
-        return "redirect:/wishlists/" + wishListId;
+        WishList wishList = wishListService.findWishListById(wishListId);
+        int userId = (wishList != null) ? wishList.getUserId() : 0;
+        return "redirect:/users/" + userId + "/wishlists/" + wishListId;
     }
 
     @PostMapping("/{wishId}/delete")
@@ -130,6 +140,8 @@ public class WishController {
 
         wishService.deleteWish(wishId);
 
-        return "redirect:/wishlists/" + wishListId;
+        WishList wishList = wishListService.findWishListById(wishListId);
+        int userId = (wishList != null) ? wishList.getUserId() : 0;
+        return "redirect:/users/" + userId + "/wishlists/" + wishListId;
     }
 }
