@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -32,5 +33,17 @@ public class SharedWishListController {
         model.addAttribute("wishes", wishService.getWishesByWishListId(wishListId));
 
         return "sharedWishList";
+    }
+
+    @PostMapping("/wishlists/{wishListId}/wishes/{wishId}/reserve")
+    public String reserveWish(@PathVariable int wishListId, @PathVariable int wishId){
+        wishService.reservedWishSetTrue(wishId);
+        return "redirect:/shared/wishlists" + wishListId;
+    }
+
+    @PostMapping("/wishlists/{wishListId}/wishes/{wishId}/reserve")
+    public String removeReserveWish(@PathVariable int wishListId, @PathVariable int wishId){
+        wishService.reservedWishSetFalse(wishId);
+        return "redirect:/shared/wishlists" + wishListId;
     }
 }

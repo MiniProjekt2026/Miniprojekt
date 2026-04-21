@@ -29,7 +29,7 @@ public class WishRepository {
 
     public List<Wish> getAllWishes() {
         String sql = """
-                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                SELECT wish_id, name, description, price, quantity, product_link, reserved, wish_list_id
                 FROM wish
                 """;
         // FIX: pass 'this' so WishRowMapper can call loadTagsForWish
@@ -38,7 +38,7 @@ public class WishRepository {
 
     public List<Wish> findWishesByWishListId(int wishListId) {
         String sql = """
-                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                SELECT wish_id, name, description, price, quantity, product_link, reserved, wish_list_id
                 FROM wish
                 WHERE wish_list_id = ?
                 """;
@@ -48,7 +48,7 @@ public class WishRepository {
 
     public Wish findWishById(int wishId) {
         String sql = """
-                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                SELECT wish_id, name, description, price, quantity, product_link, reserved, wish_list_id
                 FROM wish
                 WHERE wish_id = ?
                 """;
@@ -59,8 +59,8 @@ public class WishRepository {
 
     public void addWish(Wish wish) {
         String sql = """
-                INSERT INTO wish(name, description, price, quantity, product_link, wish_list_id)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO wish(name, description, price, quantity, product_link, reserved, wish_list_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """;
         jdbcTemplate.update(sql,
                 wish.getName(),
@@ -136,5 +136,15 @@ public class WishRepository {
                 );
             }
         }
+    }
+
+    public boolean reservedWishSetTrue(int wishId){
+        String sql = "UPDATE wish SET reserved = true WHERE wish_id = ? AND reserved = FALSE";
+        return jdbcTemplate.update(sql, wishId) > 0;
+    }
+
+    public boolean reservedWishSetFalse(int wishID){
+        String sql = "UPDATE wish SET reserved = true WHERE wish_id = ? AND reserved = TRUE";
+        return jdbcTemplate.update(sql, wishID)>0;
     }
 }

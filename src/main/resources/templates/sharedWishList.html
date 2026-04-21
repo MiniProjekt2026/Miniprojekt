@@ -25,6 +25,7 @@
     <!-- Liste -->
     <div th:if="${wishes != null and !wishes.isEmpty()}" class="wish-list">
 
+
         <!--
             FIX: fjernet link (th:href) så det ikke sender folk ind i ejer-flowet
             (WishController bruger nemlig userId redirects)
@@ -59,6 +60,24 @@
                 <div th:if="${wish.productLink != null and !#strings.isEmpty(wish.productLink)}">
                     <a th:href="${wish.productLink}" target="_blank">Se produkt</a>
                 </div>
+            </div>
+
+            <div>
+
+                <!-- Ikke reserveret -->
+                <form th:if="${!wish.reserved}"
+                      th:action="@{'/shared/wishlists/' + ${wishList.wishListId} + '/wishes/' + ${wish.wishId} + '/reserve'}"
+                      method="post">
+                    <button type="submit">Reserver</button>
+                </form>
+
+                <!--Allerede reserveret -->
+                <form th:if="${wish.reserved}"
+                      th:action="@{'/shared/wishlists/' + ${wishList.wishListId} + '/wishes/' + ${wish.wishId} + '/unreserve'}"
+                      method="post">
+                    <button type="submit">Fjern reservation</button>
+                </form>
+
             </div>
 
         </div>

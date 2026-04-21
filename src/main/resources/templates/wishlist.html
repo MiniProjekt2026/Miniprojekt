@@ -79,9 +79,9 @@
         const url = window.location.origin + "/shared/wishlists/" + wishListId;
 
         navigator.clipboard.writeText(url).then(() => {
-            alert("Link kopieret! 🎉");
+            alert("Link kopieret!");
         }).catch(() => {
-            alert("Kunne ikke kopiere link 😢");
+            alert("Kunne ikke kopiere link");
         });
     }
 </script>
