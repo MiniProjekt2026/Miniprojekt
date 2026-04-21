@@ -26,6 +26,7 @@ public class WishRowMapper implements RowMapper<Wish> {
                 rs.getInt("quantity"),
                 wishRepository.loadTagsForWish(wishId),
                 rs.getString("product_link"),
+                rs.getBoolean("reserved"),
                 rs.getInt("wish_list_id")
         );
     }

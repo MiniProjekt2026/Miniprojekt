@@ -11,22 +11,24 @@ public class Wish {
     private int quantity;
     private List<String> tags = new ArrayList<>();
     private String productLink;
+    private boolean reserved;
     private int wishListId;
 
     public Wish() {
     }
 
-    public Wish(String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId) {
+    public Wish(String name, String description, double price, int quantity, List<String> tags, String productLink, boolean reserved, int wishListId) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
         this.tags = (tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
         this.productLink = productLink;
+        this.reserved=reserved;
         this.wishListId = wishListId;
     }
 
-    public Wish(int wishId, String name, String description, double price, int quantity, List<String> tags, String productLink, int wishListId) {
+    public Wish(int wishId, String name, String description, double price, int quantity, List<String> tags, String productLink, boolean reserved, int wishListId) {
         this.wishId = wishId;
         this.name = name;
         this.description = description;
@@ -34,7 +36,16 @@ public class Wish {
         this.quantity = quantity;
         this.tags = (tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
         this.productLink = productLink;
+        this.reserved=reserved;
         this.wishListId = wishListId;
+    }
+
+    public boolean isReserved() {
+        return reserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
     }
 
     public int getWishId() {

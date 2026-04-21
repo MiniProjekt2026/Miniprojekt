@@ -65,4 +65,12 @@ public class WishService {
 
         return deleted ? existing : null;
     }
+
+    public boolean reservedWishSetTrue(int wishId){
+        return wishRepository.reservedWishSetTrue(wishId);
+    }
+
+    public boolean reservedWishSetFalse(int wishId){
+        return wishRepository.reservedWishSetFalse(wishId);
+    }
 }
