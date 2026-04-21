@@ -5,8 +5,8 @@ import com.example.wish.service.WishListService;
 import com.example.wish.service.WishService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -15,17 +15,16 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @WebMvcTest(WishListController.class)
 class WishListControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private WishListService wishListService;
 
-    @MockBean
+    @MockitoBean
     private WishService wishService;
 
     @Test
@@ -48,7 +47,6 @@ class WishListControllerTest {
                 .andExpect(model().attributeExists("wishList"))
                 .andExpect(model().attributeExists("userId"));
     }
-
 
     @Test
     void saveWishList_redirects() throws Exception {
@@ -75,7 +73,6 @@ class WishListControllerTest {
         mockMvc.perform(get("/users/1/wishlists/1/edit"))
                 .andExpect(status().isInternalServerError());
     }
-
 
     @Test
     void getWishList_returnsView() throws Exception {
