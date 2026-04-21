@@ -19,10 +19,6 @@ class UserServiceTest {
         userService = new UserService(userRepository);
     }
 
-    // ─────────────────────────────────────────────
-    // CREATE USER TESTS
-    // ─────────────────────────────────────────────
-
     @Test
     void createUser_throwsException_whenUsernameExists() {
         User user = new User();
@@ -49,10 +45,6 @@ class UserServiceTest {
         verify(userRepository).createUser(user);
     }
 
-    // ─────────────────────────────────────────────
-    // LOGIN TESTS
-    // ─────────────────────────────────────────────
-
     @Test
     void login_returnsTrue_whenCredentialsValid() {
         when(userRepository.verifyUser("test", "1234")).thenReturn(true);
@@ -70,10 +62,6 @@ class UserServiceTest {
 
         assertFalse(result);
     }
-
-    // ─────────────────────────────────────────────
-    // SIMPLE DELEGATION TESTS
-    // ─────────────────────────────────────────────
 
     @Test
     void verifyUsername_delegatesToRepository() {

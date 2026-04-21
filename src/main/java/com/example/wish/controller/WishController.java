@@ -55,7 +55,7 @@ public class WishController {
         Wish wish = wishService.findWishById(wishId);
 
         if (wish == null) {
-            throw new IllegalArgumentException("Wish findes ikke");
+            return "redirect:/error/404";
         }
 
         model.addAttribute("wish", wish);

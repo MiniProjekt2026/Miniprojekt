@@ -67,11 +67,12 @@ class WishListControllerTest {
 
     @Test
     void editWishList_throwsException_whenNotFound() throws Exception {
+
         when(wishListService.findWishListByIdAndUserId(1, 1))
                 .thenReturn(null);
 
         mockMvc.perform(get("/users/1/wishlists/1/edit"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isNotFound());
     }
 
     @Test
