@@ -31,6 +31,6 @@ public class SharedWishListController {
         model.addAttribute("wishList", wishList);
         model.addAttribute("wishes", wishService.getWishesByWishListId(wishListId));
 
-        return "sharedWishlist";
+        return "sharedWishList";
     }
 }
