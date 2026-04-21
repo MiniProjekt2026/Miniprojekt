@@ -4,6 +4,7 @@ import com.example.wish.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -76,13 +77,17 @@ class UserRepositoryTest {
 
     @Test
     void findByUsername_returnsUser_whenFound() {
+
         User user = new User();
         user.setUserId(1);
         user.setUsername("test");
         user.setPassword("1234");
 
-        when(jdbcTemplate.query(anyString(), any(), anyString()))
-                .thenAnswer(invocation -> user);
+        when(jdbcTemplate.query(
+                anyString(),
+                any(ResultSetExtractor.class),
+                any(Object[].class)
+        )).thenReturn(user);
 
         User result = repository.findByUsername("test");
 
@@ -92,8 +97,12 @@ class UserRepositoryTest {
 
     @Test
     void findByUsername_returnsNull_whenNotFound() {
-        when(jdbcTemplate.query(anyString(), any(), anyString()))
-                .thenAnswer(invocation -> null);
+
+        when(jdbcTemplate.query(
+                anyString(),
+                any(ResultSetExtractor.class),
+                any(Object[].class)
+        )).thenReturn(null);
 
         User result = repository.findByUsername("nope");
 
