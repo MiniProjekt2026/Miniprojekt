@@ -38,12 +38,12 @@ public class SharedWishListController {
     @PostMapping("/wishlists/{wishListId}/wishes/{wishId}/reserve")
     public String reserveWish(@PathVariable int wishListId, @PathVariable int wishId){
         wishService.reservedWishSetTrue(wishId);
-        return "redirect:/shared/wishlists" + wishListId;
+        return "redirect:/shared/wishlists/" + wishListId;
     }
 
-    @PostMapping("/wishlists/{wishListId}/wishes/{wishId}/reserve")
+    @PostMapping("/wishlists/{wishListId}/wishes/{wishId}/unreserve")
     public String removeReserveWish(@PathVariable int wishListId, @PathVariable int wishId){
         wishService.reservedWishSetFalse(wishId);
-        return "redirect:/shared/wishlists" + wishListId;
+        return "redirect:/shared/wishlists/" + wishListId;
     }
 }

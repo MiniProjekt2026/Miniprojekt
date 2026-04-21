@@ -49,6 +49,7 @@ class WishRepositoryIntegrationTest {
         wish.setPrice(500);
         wish.setQuantity(1);
         wish.setProductLink("link");
+        wish.setReserved(false);
         wish.setWishListId(1);
         wish.setTags(List.of("Tech"));
 
