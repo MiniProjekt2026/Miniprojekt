@@ -62,17 +62,17 @@
                 </div>
             </div>
 
-            <div>
+            <div class="wishlist-card-actions">
 
                 <!-- Ikke reserveret -->
-                <form th:if="${!wish.reserved}"
+                <form th:if="${!wish.reserved}" class="btn btn-secondary btn-sm"
                       th:action="@{'/shared/wishlists/' + ${wishList.wishListId} + '/wishes/' + ${wish.wishId} + '/reserve'}"
                       method="post">
                     <button type="submit">Reserver</button>
                 </form>
 
                 <!--Allerede reserveret -->
-                <form th:if="${wish.reserved}"
+                <form th:if="${wish.reserved}" class="btn btn-secondary btn-sm"
                       th:action="@{'/shared/wishlists/' + ${wishList.wishListId} + '/wishes/' + ${wish.wishId} + '/unreserve'}"
                       method="post">
                     <button type="submit">Fjern reservation</button>
