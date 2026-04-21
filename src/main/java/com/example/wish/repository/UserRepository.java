@@ -14,24 +14,24 @@ public class UserRepository {
     }
 
     public void createUser(User user) {
-        String sql = "INSERT INTO `user` (username, password) VALUES (?, ?)";
+        String sql = "INSERT INTO `users` (username, password) VALUES (?, ?)";
         jdbcTemplate.update(sql, user.getUsername(), user.getPassword());
     }
 
     public boolean verifyUser(String username, String password) {
-        String sql = "SELECT COUNT(*) FROM `user` WHERE username = ? AND password = ?";
+        String sql = "SELECT COUNT(*) FROM `users` WHERE username = ? AND password = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username, password);
         return count != null && count > 0;
     }
 
     public boolean verifyUsername(String username) {
-        String sql = "SELECT COUNT(*) FROM `user` WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM `users` WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username);
         return count != null && count > 0;
     }
 
     public User findByUsername(String username) {
-        String sql = "SELECT * FROM `user` WHERE username = ?";
+        String sql = "SELECT * FROM `users` WHERE username = ?";
 
         return jdbcTemplate.query(sql, rs -> {
             if (rs.next()) {
@@ -44,6 +44,4 @@ public class UserRepository {
             return null;
         }, username);
     }
-
-    //public void editPassword()
 }
