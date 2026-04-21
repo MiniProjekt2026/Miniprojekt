@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 @WebMvcTest(WishListController.class)
 class WishListControllerTest {
 
@@ -26,10 +27,6 @@ class WishListControllerTest {
 
     @MockBean
     private WishService wishService;
-
-    // ─────────────────────────────────────────────
-    // GET ALL WISHLISTS
-    // ─────────────────────────────────────────────
 
     @Test
     void getAllWishLists_returnsView() throws Exception {
@@ -43,10 +40,6 @@ class WishListControllerTest {
                 .andExpect(model().attributeExists("userId"));
     }
 
-    // ─────────────────────────────────────────────
-    // ADD WISHLIST PAGE
-    // ─────────────────────────────────────────────
-
     @Test
     void addWishList_returnsView() throws Exception {
         mockMvc.perform(get("/users/1/wishlists/add"))
@@ -56,9 +49,6 @@ class WishListControllerTest {
                 .andExpect(model().attributeExists("userId"));
     }
 
-    // ─────────────────────────────────────────────
-    // SAVE WISHLIST
-    // ─────────────────────────────────────────────
 
     @Test
     void saveWishList_redirects() throws Exception {
@@ -66,10 +56,6 @@ class WishListControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/users/1/wishlists"));
     }
-
-    // ─────────────────────────────────────────────
-    // EDIT PAGE (FOUND)
-    // ─────────────────────────────────────────────
 
     @Test
     void editWishList_returnsView_whenFound() throws Exception {
@@ -81,10 +67,6 @@ class WishListControllerTest {
                 .andExpect(view().name("editWishList"));
     }
 
-    // ─────────────────────────────────────────────
-    // EDIT PAGE (NOT FOUND)
-    // ─────────────────────────────────────────────
-
     @Test
     void editWishList_throwsException_whenNotFound() throws Exception {
         when(wishListService.findWishListByIdAndUserId(1, 1))
@@ -94,9 +76,6 @@ class WishListControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
-    // ─────────────────────────────────────────────
-    // VIEW SINGLE WISHLIST
-    // ─────────────────────────────────────────────
 
     @Test
     void getWishList_returnsView() throws Exception {
@@ -112,10 +91,6 @@ class WishListControllerTest {
                 .andExpect(model().attributeExists("wishList"))
                 .andExpect(model().attributeExists("wishes"));
     }
-
-    // ─────────────────────────────────────────────
-    // DELETE
-    // ─────────────────────────────────────────────
 
     @Test
     void deleteWishList_redirects() throws Exception {
