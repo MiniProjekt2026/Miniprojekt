@@ -42,12 +42,12 @@ public class WishService {
             return null;
         }
 
-        existing.setName(newValues.getName());
-        existing.setDescription(newValues.getDescription());
-        existing.setPrice(newValues.getPrice());
-        existing.setQuantity(newValues.getQuantity());
-        existing.setProductLink(newValues.getProductLink());
-        existing.setTags(newValues.getTags());
+        if (newValues.getName() != null) existing.setName(newValues.getName());
+        if (newValues.getDescription() != null) existing.setDescription(newValues.getDescription());
+        if (newValues.getPrice() != 0) existing.setPrice(newValues.getPrice());
+        if (newValues.getQuantity() != 0) existing.setQuantity(newValues.getQuantity());
+        if (newValues.getProductLink() != null) existing.setProductLink(newValues.getProductLink());
+        if (newValues.getTags() != null) existing.setTags(newValues.getTags());
 
         boolean updated = wishRepository.updateWish(wishId, existing);
 
