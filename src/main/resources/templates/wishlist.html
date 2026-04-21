@@ -9,12 +9,6 @@
 <body>
 
 <nav class="navbar">
-    <!--
-        FIX: was using ${wishList.userId} in all href expressions.
-        The controller already adds userId to the model as a plain attribute — use that instead.
-        ${wishList.userId} is fragile: if wishList is ever null, Thymeleaf throws before any guard,
-        causing a Whitelabel error. ${userId} is always safe since it comes straight from @PathVariable.
-    -->
     <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Ønske<span>listen</span></a>
     <div class="navbar-links">
         <a th:href="@{/users/{userId}/wishlists(userId=${userId})}">← Mine lister</a>
@@ -29,11 +23,19 @@
             <h1 th:text="${wishList.name}">Ønskeliste</h1>
             <p>Dine ønsker på denne liste</p>
         </div>
+
         <div class="section-actions">
+            <button type="button"
+                    class="btn btn-secondary"
+                    onclick="copyShareLink()">
+                🔗 Del liste
+            </button>
+
             <a class="btn btn-secondary"
                th:href="@{/users/{userId}/wishlists/{wishListId}/edit(userId=${userId}, wishListId=${wishList.wishListId})}">
                 Rediger liste
             </a>
+
             <a class="btn btn-primary"
                th:href="@{/wishlists/{wishListId}/wishes/add(wishListId=${wishList.wishListId})}">
                 + Nyt ønske
@@ -41,12 +43,6 @@
         </div>
     </div>
 
-    <!--
-        FIX: was iterating ${wishList.wishes} for the list but checking ${wishes} (the separate
-        model attribute) for the empty state — inconsistent. The controller adds BOTH to the model.
-        Use ${wishes} (the dedicated model attribute) for everything so it's consistent and
-        the empty-state guard actually matches what the list renders.
-    -->
     <div th:if="${wishes != null and !wishes.isEmpty()}" class="wish-list">
         <a th:each="wish : ${wishes}"
            class="wish-item"
@@ -66,7 +62,6 @@
         </a>
     </div>
 
-    <!-- FIX: was checking ${wishes == null or wishes.isEmpty()} while rendering from ${wishList.wishes} above -->
     <div th:if="${wishes == null or wishes.isEmpty()}" class="empty-state card">
         <span class="icon">🎁</span>
         <h3>Ingen ønsker endnu</h3>
@@ -77,6 +72,19 @@
         </a>
     </div>
 </div>
+
+<script th:inline="javascript">
+    function copyShareLink() {
+        const wishListId = /*[[${wishList.wishListId}]]*/ 0;
+        const url = window.location.origin + "/shared/wishlists/" + wishListId;
+
+        navigator.clipboard.writeText(url).then(() => {
+            alert("Link kopieret! 🎉");
+        }).catch(() => {
+            alert("Kunne ikke kopiere link 😢");
+        });
+    }
+</script>
 
 </body>
 </html>
