@@ -37,7 +37,7 @@ CREATE TABLE wish
     description  VARCHAR(255),
     price DOUBLE,
     quantity     INT,
-    product_link VARCHAR(255),
+    product_link VARCHAR(2048),
     wish_list_id INT          NOT NULL,
     FOREIGN KEY (wish_list_id) REFERENCES wish_list (wish_list_id) ON DELETE CASCADE
 );
