@@ -33,6 +33,7 @@ public class WishListRepository {
                         rs.getInt("quantity"),
                         loadTagsForWish(rs.getInt("wish_id")),
                         rs.getString("product_link"),
+                        rs.getBoolean("reserved"),
                         rs.getInt("wish_list_id")
                 ), wishListId);
 
