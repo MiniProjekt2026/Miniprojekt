@@ -19,10 +19,6 @@ class WishListServiceTest {
         service = new WishListService(repository);
     }
 
-    // ─────────────────────────────────────────────
-    // UPDATE TESTS
-    // ─────────────────────────────────────────────
-
     @Test
     void updateWishList_returnsUpdated_whenSuccess() {
         WishList existing = new WishList();
@@ -63,10 +59,6 @@ class WishListServiceTest {
         assertNull(result);
     }
 
-    // ─────────────────────────────────────────────
-    // DELETE TESTS
-    // ─────────────────────────────────────────────
-
     @Test
     void deleteWishList_returnsDeleted_whenSuccess() {
         WishList existing = new WishList();
@@ -102,10 +94,6 @@ class WishListServiceTest {
 
         assertNull(result);
     }
-
-    // ─────────────────────────────────────────────
-    // OPTIONAL SIMPLE TESTS
-    // ─────────────────────────────────────────────
 
     @Test
     void getAllWishLists_callsRepository() {

@@ -21,10 +21,6 @@ class WishServiceTest {
         service = new WishService(repository);
     }
 
-    // ─────────────────────────────────────────────
-    // UPDATE TESTS
-    // ─────────────────────────────────────────────
-
     @Test
     void updateWish_returnsUpdated_whenSuccess() {
         Wish existing = new Wish();
@@ -75,10 +71,6 @@ class WishServiceTest {
         assertNull(result);
     }
 
-    // ─────────────────────────────────────────────
-    // DELETE TESTS
-    // ─────────────────────────────────────────────
-
     @Test
     void deleteWish_returnsDeleted_whenSuccess() {
         Wish existing = new Wish();
@@ -114,10 +106,6 @@ class WishServiceTest {
 
         assertNull(result);
     }
-
-    // ─────────────────────────────────────────────
-    // OPTIONAL SIMPLE TESTS
-    // ─────────────────────────────────────────────
 
     @Test
     void getWishes_callsRepository() {

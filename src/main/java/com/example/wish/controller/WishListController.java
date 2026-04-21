@@ -3,9 +3,11 @@ package com.example.wish.controller;
 import com.example.wish.model.WishList;
 import com.example.wish.service.WishListService;
 import com.example.wish.service.WishService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/users/{userId}/wishlists")
@@ -47,7 +49,7 @@ public class WishListController {
         WishList wishList = wishListService.findWishListByIdAndUserId(userId, wishListId);
 
         if (wishList == null) {
-            throw new IllegalArgumentException("Wishlist findes ikke");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wishlist findes ikke");
         }
 
         model.addAttribute("wishList", wishList);
