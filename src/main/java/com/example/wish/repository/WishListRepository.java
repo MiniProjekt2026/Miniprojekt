@@ -19,7 +19,7 @@ public class WishListRepository {
 
     private List<Wish> loadWishesForList(int wishListId) {
         String sql = """
-                SELECT wish_id, name, description, price, quantity, product_link, wish_list_id
+                SELECT wish_id, name, description, price, quantity, product_link, reserved, wish_list_id
                 FROM wish
                 WHERE wish_list_id = ?
                 """;

@@ -68,6 +68,7 @@ public class WishRepository {
                 wish.getPrice(),
                 wish.getQuantity(),
                 wish.getProductLink(),
+                wish.isReserved(),
                 wish.getWishListId()
         );
 
@@ -144,7 +145,7 @@ public class WishRepository {
     }
 
     public boolean reservedWishSetFalse(int wishID){
-        String sql = "UPDATE wish SET reserved = true WHERE wish_id = ? AND reserved = TRUE";
+        String sql = "UPDATE wish SET reserved = false WHERE wish_id = ? AND reserved = TRUE";
         return jdbcTemplate.update(sql, wishID)>0;
     }
 }

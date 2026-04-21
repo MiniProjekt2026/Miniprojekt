@@ -72,6 +72,7 @@ class WishRepositoryTest {
                 eq(1000.0),
                 eq(1),
                 eq("link"),
+                eq(false),
                 eq(1)
         );
     }

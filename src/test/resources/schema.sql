@@ -27,6 +27,7 @@ CREATE TABLE wish (
                       price DOUBLE,
                       quantity INT,
                       product_link VARCHAR(255),
+                      reserved BOOLEAN DEFAULT FALSE,
                       wish_list_id INT NOT NULL,
 
                       FOREIGN KEY (wish_list_id)
