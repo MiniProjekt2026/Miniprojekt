@@ -96,13 +96,6 @@ class WishListServiceTest {
     }
 
     @Test
-    void getAllWishLists_callsRepository() {
-        service.getAllWishLists();
-
-        verify(repository).getAllWishLists();
-    }
-
-    @Test
     void addWishList_callsRepository() {
         WishList wl = new WishList();
 

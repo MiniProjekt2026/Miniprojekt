@@ -9,7 +9,6 @@
 <body>
 
 <nav class="navbar">
-    <!-- Ingen userId her -->
     <a class="navbar-brand" href="/">Ønske<span>listen</span></a>
 </nav>
 
@@ -22,14 +21,8 @@
         </div>
     </div>
 
-    <!-- Liste -->
     <div th:if="${wishes != null and !wishes.isEmpty()}" class="wish-list">
 
-
-        <!--
-            FIX: fjernet link (th:href) så det ikke sender folk ind i ejer-flowet
-            (WishController bruger nemlig userId redirects)
-        -->
         <div th:each="wish : ${wishes}" class="wish-item">
 
             <div class="wish-item-info">
@@ -41,7 +34,6 @@
                     Beskrivelse
                 </p>
 
-                <!-- Tags (valgfri men nice touch) -->
                 <div th:if="${wish.tags != null and !wish.tags.isEmpty()}">
                     <span th:each="tag : ${wish.tags}"
                           style="margin-right:5px; font-size:0.8em;">
@@ -56,22 +48,18 @@
                     Pris
                 </span>
 
-                <!-- Produktlink (kun visning) -->
                 <div th:if="${wish.productLink != null and !#strings.isEmpty(wish.productLink)}">
                     <a th:href="${wish.productLink}" target="_blank">Se produkt</a>
                 </div>
             </div>
 
             <div class="wishlist-card-actions">
-
-                <!-- Ikke reserveret -->
                 <form th:if="${!wish.reserved}"
                       th:action="@{'/shared/wishlists/' + ${wishList.wishListId} + '/wishes/' + ${wish.wishId} + '/reserve'}"
                       method="post">
                     <button type="submit" class="btn btn-secondary btn-sm">Reserver</button>
                 </form>
 
-                <!--Allerede reserveret -->
                 <form th:if="${wish.reserved}"
                       th:action="@{'/shared/wishlists/' + ${wishList.wishListId} + '/wishes/' + ${wish.wishId} + '/unreserve'}"
                       method="post">
@@ -83,7 +71,6 @@
         </div>
     </div>
 
-    <!-- Empty state -->
     <div th:if="${wishes == null or wishes.isEmpty()}" class="empty-state card">
         <span class="icon">🎁</span>
         <h3>Ingen ønsker endnu</h3>

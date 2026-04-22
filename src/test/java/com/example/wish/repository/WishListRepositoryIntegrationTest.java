@@ -26,22 +26,6 @@ class WishListRepositoryIntegrationTest {
     private WishListRepository repository;
 
     @Test
-    void getAllWishLists_returnsDataWithWishesAndTags() {
-        List<WishList> lists = repository.getAllWishLists();
-
-        assertFalse(lists.isEmpty());
-
-        WishList wl = lists.get(0);
-
-        assertEquals("Birthday", wl.getName());
-        assertNotNull(wl.getWishes());
-        assertFalse(wl.getWishes().isEmpty());
-
-        assertEquals("Laptop", wl.getWishes().get(0).getName());
-        assertEquals("Electronics", wl.getWishes().get(0).getTags().get(0));
-    }
-
-    @Test
     void findWishListByUserId_returnsCorrectLists() {
         List<WishList> lists = repository.findWishListsByUserId(1);
 

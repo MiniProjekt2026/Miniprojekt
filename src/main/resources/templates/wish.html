@@ -23,10 +23,6 @@
             <h1 th:text="${wish.name}">Ønske</h1>
         </div>
         <div class="section-actions">
-            <!--
-                FIX: original used ${wish.id} in edit link but wishlist.html used ${wish.wishId}.
-                WishController uses @PathVariable int wishId, so use wish.wishId consistently.
-            -->
             <a class="btn btn-secondary btn-sm"
                th:href="@{/wishlists/{wishListId}/wishes/edit/{wishId}(wishListId=${wish.wishListId}, wishId=${wish.wishId})}">
                 Rediger

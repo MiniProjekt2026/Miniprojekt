@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- FIX: was missing title suffix and stylesheet entirely -->
     <title>Ønskeliste – Ønskelisten</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-<!-- FIX: was missing navbar entirely -->
 <nav class="navbar">
     <a class="navbar-brand" th:href="@{/users/{userId}/wishlists(userId=${userId})}">Ønske<span>listen</span></a>
     <div class="navbar-links">
@@ -66,7 +64,6 @@
         </div>
     </div>
 
-    <!-- FIX: was missing empty state -->
     <div th:if="${wishes == null or wishes.isEmpty()}" class="empty-state card">
         <span class="icon">🎁</span>
         <h3>Ingen ønsker endnu</h3>

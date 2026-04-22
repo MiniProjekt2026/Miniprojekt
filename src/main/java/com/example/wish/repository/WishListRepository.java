@@ -49,19 +49,6 @@ public class WishListRepository {
         return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("tag_name"), wishId);
     }
 
-    public List<WishList> getAllWishLists() {
-        String sql = """
-                SELECT wish_list_id, user_id, name
-                FROM wish_list
-                """;
-
-        List<WishList> wishLists = jdbcTemplate.query(sql, new WishListRowMapper());
-        for (WishList wl : wishLists) {
-            wl.setWishes(loadWishesForList(wl.getWishListId()));
-        }
-        return wishLists;
-    }
-
     public List<WishList> findWishListsByUserId(int userId) {
         String sql = """
                 SELECT wish_list_id, user_id, name

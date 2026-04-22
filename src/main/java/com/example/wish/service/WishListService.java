@@ -14,8 +14,6 @@ public class WishListService{
         this.wishListRepository = wishListRepository;
     }
 
-    public List<WishList> getAllWishLists() {return wishListRepository.getAllWishLists();}
-
     public WishList findWishListById(int wishListId) {
         return wishListRepository.findWishListById(wishListId);
     }
@@ -66,5 +64,4 @@ public class WishListService{
     public void addWishList(WishList wishList) {
         wishListRepository.addWishList(wishList);
     }
-    //:)
 }

@@ -23,23 +23,10 @@
     </div>
 
     <div class="form-card">
-        <!--
-            FIX 1: Form action used ${wish.id} — field is named wishId, so must be ${wish.wishId}
-            FIX 2: Hidden fields used *{wish.wishId} and *{wishListId} which are not valid
-                   property paths on the bound Wish object.
-                   - *{wish.wishId} → *{wishId}  (Wish has getWishId(), not getWish().getWishId())
-                   - *{wishListId}  → plain th:value since wishListId is a model attribute, not a Wish field
-                     (actually Wish DOES have wishListId, so *{wishListId} is fine — but it must not
-                      also be in th:field which generates id/name from the path)
-        -->
         <form th:action="@{/wishlists/{wishListId}/wishes/{wishId}/update(wishListId=${wishListId}, wishId=${wish.wishId})}"
               method="post"
               th:object="${wish}">
-
-            <!-- FIX: was *{wish.wishId} — invalid nested path on the bound object -->
             <input type="hidden" th:field="*{wishId}" />
-            <!-- FIX: was *{wishListId} — Thymeleaf tried to resolve wish.wishListId as wish.wishListId (fine),
-                 but the field name clashed; use th:value with the model attribute to be safe -->
             <input type="hidden" name="wishListId" th:value="${wishListId}" />
 
             <div class="form-group">
@@ -62,7 +49,6 @@
                     <label for="quantity">Antal</label>
                     <div class="stepper-group">
                         <button type="button" class="stepper-btn" onclick="decrease()">−</button>
-                        <!-- FIX: label "Antal" had no for= attribute — added for="quantity" -->
                         <input type="number" id="quantity" th:field="*{quantity}" min="1" />
                         <button type="button" class="stepper-btn" onclick="increase()">+</button>
                     </div>
