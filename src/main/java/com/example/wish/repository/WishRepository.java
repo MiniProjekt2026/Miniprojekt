@@ -15,8 +15,6 @@ public class WishRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // ── helpers ──────────────────────────────────────────────────────────────
-
     public List<String> loadTagsForWish(int wishId) {
         String sql = """
                 SELECT t.tag_name
@@ -32,7 +30,7 @@ public class WishRepository {
                 SELECT wish_id, name, description, price, quantity, product_link, reserved, wish_list_id
                 FROM wish
                 """;
-        // FIX: pass 'this' so WishRowMapper can call loadTagsForWish
+
         return jdbcTemplate.query(sql, new WishRowMapper(this));
     }
 
@@ -42,7 +40,7 @@ public class WishRepository {
                 FROM wish
                 WHERE wish_list_id = ?
                 """;
-        // FIX: pass 'this'
+
         return jdbcTemplate.query(sql, new WishRowMapper(this), wishListId);
     }
 
@@ -52,7 +50,7 @@ public class WishRepository {
                 FROM wish
                 WHERE wish_id = ?
                 """;
-        // FIX: pass 'this'
+
         List<Wish> result = jdbcTemplate.query(sql, new WishRowMapper(this), wishId);
         return result.isEmpty() ? null : result.get(0);
     }

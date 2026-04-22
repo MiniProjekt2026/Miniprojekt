@@ -10,7 +10,6 @@ public class WishRowMapper implements RowMapper<Wish> {
 
     private final WishRepository wishRepository;
 
-    // FIX: wishRepository was never injected — was always null → NullPointerException
     public WishRowMapper(WishRepository wishRepository) {
         this.wishRepository = wishRepository;
     }
@@ -31,12 +30,3 @@ public class WishRowMapper implements RowMapper<Wish> {
         );
     }
 }
-
-
-//  private int id;
-//    private String name;
-//    private String description;
-//    private double price;
-//    private int quantity;
-//    private List<String> tags;
-//    private String productLink;

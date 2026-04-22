@@ -2,7 +2,6 @@ package com.example.wish.service;
 
 import com.example.wish.model.WishList;
 import com.example.wish.repository.WishListRepository;
-import com.example.wish.repository.WishRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
